@@ -1,5 +1,19 @@
 # Cheat script for Zombie's Retreat 2: Gridlocked
 
+<div>
+    <p align="left">
+        <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/issues">
+            <img src="https://img.shields.io/github/issues/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub issues">
+        </a>
+        <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases/latest">
+            <img src="https://img.shields.io/github/v/release/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub release (latest by date)">
+        </a>
+        <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/blob/master/LICENSE">
+            <img src="https://img.shields.io/github/license/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub License">
+        </a>
+    </p>
+</div>
+
 This repository aims to provide a simple solution cheating in the game Zombie's Retreat 2: Gridlocked. Visit https://sirensdomain.itch.io/zombies-retreat-2 for more information about the game Zombie's Retreat 2.
 
 ## Cheat List
