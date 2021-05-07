@@ -44,6 +44,10 @@
     speed_multiplier = final_speed_multiplier;
   };
 
+  const __monitorCustomInputSetup__ = function() {
+    Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
+  };
+
   const __monitorCustomInput__ = function() {
     if (!SceneManager.isSceneChanging()) {
       if (Input.isTriggered(speed_multiplier_keyname)) {
@@ -124,6 +128,7 @@
   const Hook__Scene_Map__updateScene = Scene_Map.prototype.updateScene;
   Scene_Map.prototype.updateScene = function() {
     Hook__Scene_Map__updateScene.call(this, arguments);
+    __monitorCustomInputSetup__();
     __monitorCustomInput__();
   };
 
