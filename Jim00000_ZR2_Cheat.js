@@ -42,6 +42,7 @@
       final_speed_multiplier = 1.0;
     }
     speed_multiplier = final_speed_multiplier;
+    updateSpeedChangeInfo(speed_multiplier);
   };
 
   const __monitorCustomInputSetup__ = function() {
@@ -117,11 +118,47 @@
     __handleCheat__();
   };  // end of __cheatInjection__
 
+  function createDefaultTextStyle() {
+    return new PIXI.TextStyle(
+        {fill: 'white', fontFamily: 'Times New Roman', fontSize: 16});
+  };
+
+  function createSpeedMultiplierMessageBoilerplate(speedMultiplier) {
+    return `Speed Multiplier : ${speedMultiplier}x`;
+  }
+
+  function buildSpeedChangeInfo() {
+    let text = new PIXI.Text('', createDefaultTextStyle());
+    text._text = createSpeedMultiplierMessageBoilerplate(speed_multiplier);
+    text.x = 5;
+    text.updateText();
+    return text;
+  };
+
+  function updateSpeedChangeInfo(speedMultiplier) {
+    const text = createSpeedMultiplierMessageBoilerplate(speedMultiplier);
+    updateSpeedChangeInfoMessage(text);
+  };
+
+  function updateSpeedChangeInfoMessage(text) {
+    SceneManager._scene.speedChangeInfo._text = text;
+    SceneManager._scene.speedChangeInfo.updateText();
+  };
+
   // Hook Scene_Map::update method
   const Hook__Scene_Map__update = Scene_Map.prototype.update;
   Scene_Map.prototype.update = function() {
     Hook__Scene_Map__update.call(this, arguments);
     __cheatInjection__();
+  };
+
+  // Hook Scene_Map::createDisplayObjects method
+  const Hook__Scene_Map__createDisplayObjects =
+      Scene_Map.prototype.createDisplayObjects;
+  Scene_Map.prototype.createDisplayObjects = function() {
+    Hook__Scene_Map__createDisplayObjects.call(this, arguments);
+    this.speedChangeInfo = buildSpeedChangeInfo();
+    this.addChild(this.speedChangeInfo);
   };
 
   // Hook Scene_Map::updateScene method
