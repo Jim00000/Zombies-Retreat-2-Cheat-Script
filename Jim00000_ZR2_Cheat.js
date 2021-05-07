@@ -42,7 +42,7 @@
       final_speed_multiplier = 1.0;
     }
     speed_multiplier = final_speed_multiplier;
-    updateSpeedChangeInfo(speed_multiplier);
+    __updateSpeedChangeInfo__(speed_multiplier);
   };
 
   const __monitorCustomInputSetup__ = function() {
@@ -118,29 +118,29 @@
     __handleCheat__();
   };  // end of __cheatInjection__
 
-  function createDefaultTextStyle() {
+  function __createDefaultTextStyle__() {
     return new PIXI.TextStyle(
         {fill: 'white', fontFamily: 'Times New Roman', fontSize: 16});
   };
 
-  function createSpeedMultiplierMessageBoilerplate(speedMultiplier) {
+  function __createSpeedMultiplierMessageBoilerplate__(speedMultiplier) {
     return `Speed Multiplier : ${speedMultiplier}x`;
   }
 
-  function buildSpeedChangeInfo() {
-    let text = new PIXI.Text('', createDefaultTextStyle());
-    text._text = createSpeedMultiplierMessageBoilerplate(speed_multiplier);
+  function __buildSpeedChangeInfo__() {
+    let text = new PIXI.Text('', __createDefaultTextStyle__());
+    text._text = __createSpeedMultiplierMessageBoilerplate__(speed_multiplier);
     text.x = 5;
     text.updateText();
     return text;
   };
 
-  function updateSpeedChangeInfo(speedMultiplier) {
-    const text = createSpeedMultiplierMessageBoilerplate(speedMultiplier);
-    updateSpeedChangeInfoMessage(text);
+  function __updateSpeedChangeInfo__(speedMultiplier) {
+    const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
+    __updateSpeedChangeInfoMessage__(text);
   };
 
-  function updateSpeedChangeInfoMessage(text) {
+  function __updateSpeedChangeInfoMessage__(text) {
     SceneManager._scene.speedChangeInfo._text = text;
     SceneManager._scene.speedChangeInfo.updateText();
   };
@@ -157,7 +157,7 @@
       Scene_Map.prototype.createDisplayObjects;
   Scene_Map.prototype.createDisplayObjects = function() {
     Hook__Scene_Map__createDisplayObjects.call(this, arguments);
-    this.speedChangeInfo = buildSpeedChangeInfo();
+    this.speedChangeInfo = __buildSpeedChangeInfo__();
     this.addChild(this.speedChangeInfo);
   };
 
