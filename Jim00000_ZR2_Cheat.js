@@ -23,8 +23,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.2.1
-// ▶ Update         : 05.28.2021
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.3.2
+// ▶ Update         : 07.31.2021
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -104,10 +104,34 @@
     $gameParty._items[13] = 99;
     // Golden Key x99
     $gameParty._items[14] = 99;
+    // Crafting Manual (Beginner) x99
+    // $gameParty._items[15] = 99;
+    // Crafting Manual (Intermediate) x99
+    // $gameParty._items[16] = 99;
+    // Crafting Manual (Advanced) x99
+    // $gameParty._items[17] = 99;
+    // Pistol x99
+    // $gameParty._items[19] = 99;
     // Ammunition(Revolver) x99
     $gameParty._items[20] = 99;
     // Ammunition x4 (Rev.) x99
     $gameParty._items[21] = 99;
+    // String x99
+    $gameParty._items[29] = 99;
+    // Fishing rod x99
+    $gameParty._items[30] = 99;
+    // Wood Cutting Axe x99
+    $gameParty._items[31] = 99;
+    // Metal-Cutting Saw x99
+    $gameParty._items[32] = 99;
+    // Nostalgic Flower x99
+    // $gameParty._items[43] = 99;
+    // Hydro Plant Key x99
+    // $gameParty._items[44] = 99;
+    // Storage Crane Card A x99
+    // $gameParty._items[45] = 99;
+    // Fiona's Shop Schematic x99
+    // $gameParty._items[50] = 99;
   };
 
   const __cheatInjection__ = function() {
