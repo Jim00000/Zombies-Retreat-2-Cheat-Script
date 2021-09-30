@@ -94,9 +94,9 @@
     $gameParty._items[8] = 99;
     // Food (Junk) x99
     $gameParty._items[9] = 99;
-    // Wine x99
+    // Red Wine x99
     $gameParty._items[10] = 99;
-    // Vodka x99
+    // Premium Vodka x99
     $gameParty._items[11] = 99;
     // Med kit x99
     $gameParty._items[12] = 99;
@@ -110,12 +110,22 @@
     // $gameParty._items[16] = 99;
     // Crafting Manual (Advanced) x99
     // $gameParty._items[17] = 99;
+    // Distillery Book x99
+    // $gameParty._items[18] = 99;
     // Pistol x99
     // $gameParty._items[19] = 99;
     // Ammunition(Revolver) x99
     $gameParty._items[20] = 99;
     // Ammunition x4 (Rev.) x99
     $gameParty._items[21] = 99;
+    // Shotgun x99
+    // $gameParty._items[22] = 99;
+    // Ammunition (Shotgun) x99
+    $gameParty._items[23] = 99;
+    // Ammunition X6 (Shot.) x99
+    $gameParty._items[24] = 99;
+    // 3rd Weapon Placeholder x99
+    // $gameParty._items[25] = 99;
     // String x99
     $gameParty._items[29] = 99;
     // Fishing rod x99
@@ -124,6 +134,10 @@
     $gameParty._items[31] = 99;
     // Metal-Cutting Saw x99
     $gameParty._items[32] = 99;
+    // Hookshot x99
+    $gameParty._items[33] = 99;
+    // Police Station Key x99
+    // $gameParty._items[42] = 99;
     // Nostalgic Flower x99
     // $gameParty._items[43] = 99;
     // Hydro Plant Key x99
@@ -132,6 +146,18 @@
     // $gameParty._items[45] = 99;
     // Fiona's Shop Schematic x99
     // $gameParty._items[50] = 99;
+    // Garden Schematic x99
+    // $gameParty._items[51] = 99;
+    // Communications Kit x99
+    // $gameParty._items[52] = 99;
+    // Helios Module B
+    // $gameParty._items[55] = 99;
+    // Bathroom Seat Instructions
+    // $gameParty._items[58] = 99;
+    // Water Filter Schematic
+    // $gameParty._items[59] = 99;
+    // Stacy's Diner Schematic
+    // $gameParty._items[60] = 99;
   };
 
   const __cheatInjection__ = function() {
