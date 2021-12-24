@@ -21,13 +21,17 @@ This repository aims to provide a simple solution cheating in the game Zombie's 
 
 ## Cheat List
 
-- Speedhack (x1, x1.5, x2, x2.5, x3)
+- Speedhack (x1, x1.5, x2, x2.5, x3) (In Game map, or while message window is showing)
 - No damage / Full HP
 - Full Items
 
 ## Install
 
 Find the matched game version tag, download the repository, replace www/js/plugins.js by my plugins.js and put Jim00000_ZR2_Cheat.js under www/js/plugins/ directory.
+
+You should find "cheat is activated." message in title scene as following:
+
+![](https://i.imgur.com/4Dea18H.png)
 
 ## User guide
 
