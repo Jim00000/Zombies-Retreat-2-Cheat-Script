@@ -135,7 +135,7 @@
     // Metal-Cutting Saw x99
     $gameParty._items[32] = 99;
     // Hookshot x99
-    $gameParty._items[33] = 99;
+    // $gameParty._items[33] = 99;
     // Police Station Key x99
     // $gameParty._items[42] = 99;
     // Nostalgic Flower x99
@@ -150,6 +150,8 @@
     // $gameParty._items[51] = 99;
     // Communications Kit x99
     // $gameParty._items[52] = 99;
+    // Subway Pass x99
+    // $gameParty._items[53] = 99;
     // Helios Module B
     // $gameParty._items[55] = 99;
     // Bathroom Seat Instructions
@@ -158,6 +160,24 @@
     // $gameParty._items[59] = 99;
     // Stacy's Diner Schematic
     // $gameParty._items[60] = 99;
+    // Strawberry Milkshake
+    $gameParty._items[66] = 99;
+    // Chocolate Milkshake
+    $gameParty._items[67] = 99;
+    // Blueberry Milkshake
+    $gameParty._items[68] = 99;
+    // Rootbeer Float
+    $gameParty._items[69] = 99;
+    // Strawberries [Stacy]
+    $gameParty._items[70] = 99;
+    // Blueberries [Stacy]
+    $gameParty._items[71] = 99;
+    // Chocolate [Stacy]
+    $gameParty._items[72] = 99;
+    // Milk [Stacy]
+    $gameParty._items[73] = 99;
+    // Silk Bra
+    // $gameParty._items[80] = 99;
   };
 
   const __cheatInjection__ = function() {
