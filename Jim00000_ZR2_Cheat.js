@@ -31,6 +31,7 @@
 (() => {
   let speed_multiplier = 1.0;
   let fadeEffectHandlerId = -1;
+  const supported_game_version = "beta 0.5.2"
   const speed_multiplier_virtualkey = 117  // F6
   const speed_multiplier_keyname = 'change_speed_multiplier';
 
@@ -207,6 +208,15 @@
     return text;
   };
 
+  function __buildCheatScriptInfo__() {
+    let text = new PIXI.Text('', __createDefaultTextStyle__());
+    text._text = `Cheat is activated. Support Game Version: ${supported_game_version}`;
+    text.x = 5;
+    text.alpha = 1.0;
+    text.updateText();
+    return text;
+  };
+
   function __updateSpeedChangeInfo__(speedMultiplier) {
     const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
     __updateSpeedChangeInfoMessage__(text);
@@ -259,6 +269,14 @@
     Hook__Scene_Map__updateScene.call(this, arguments);
     __monitorCustomInputSetup__();
     __monitorCustomInput__();
+  };
+
+  // Hook Scene_Title::create method
+  const Hook__Scene_Title__create = Scene_Title.prototype.create;
+  Scene_Title.prototype.create = function() {
+    Hook__Scene_Title__create.call(this, arguments);
+    this.cheatScriptInfo = __buildCheatScriptInfo__();
+    this.addChild(this.cheatScriptInfo);
   };
 
   // Hook  SceneManager.updateMain method
