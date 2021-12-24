@@ -55,8 +55,10 @@
     if (!SceneManager.isSceneChanging()) {
       if (Input.isTriggered(speed_multiplier_keyname)) {
         __onSpeedMultiplierChange__();
+        return true;
       }
     }
+    return false;
   };
 
   const __handleCheat__ = function() {
@@ -279,7 +281,16 @@
     this.addChild(this.cheatScriptInfo);
   };
 
-  // Hook  SceneManager.updateMain method
+  // Hook Window_Message::updateInput method
+  const Hook__Window_Message__updateInput = Window_Message.prototype.updateInput;
+  Window_Message.prototype.updateInput = function() {
+    let isUpdated = Hook__Window_Message__updateInput.call(this, arguments);
+    __monitorCustomInputSetup__();
+    isUpdated |= __monitorCustomInput__();
+    return isUpdated;
+  };
+
+  // Hook SceneManager.updateMain method
   const Hook__SceneManager__updateMain = SceneManager.updateMain;
   SceneManager.updateMain = function() {
     if (Utils.isMobileSafari()) {
