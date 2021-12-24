@@ -265,14 +265,6 @@
     this.addChild(this.speedChangeInfo);
   };
 
-  // Hook Scene_Map::updateScene method
-  const Hook__Scene_Map__updateScene = Scene_Map.prototype.updateScene;
-  Scene_Map.prototype.updateScene = function() {
-    Hook__Scene_Map__updateScene.call(this, arguments);
-    __monitorCustomInputSetup__();
-    __monitorCustomInput__();
-  };
-
   // Hook Scene_Title::create method
   const Hook__Scene_Title__create = Scene_Title.prototype.create;
   Scene_Title.prototype.create = function() {
