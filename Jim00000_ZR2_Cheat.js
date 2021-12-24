@@ -23,13 +23,15 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.4.3
-// ▶ Update         : 10.01.2021
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.5.2
+// ▶ Update         : 12.25.2021
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
 (() => {
   let speed_multiplier = 1.0;
+  let fadeEffectHandlerId = -1;
+  const supported_game_version = "beta 0.5.2"
   const speed_multiplier_virtualkey = 117  // F6
   const speed_multiplier_keyname = 'change_speed_multiplier';
 
@@ -53,8 +55,10 @@
     if (!SceneManager.isSceneChanging()) {
       if (Input.isTriggered(speed_multiplier_keyname)) {
         __onSpeedMultiplierChange__();
+        return true;
       }
     }
+    return false;
   };
 
   const __handleCheat__ = function() {
@@ -69,10 +73,10 @@
   };
 
   const __setFullHP__ = function() {
+    // Max HP (id = 19)
+    const maxHP = $gameVariables.value(19);
     // Current HP (id = 18) - set to 99999
-    $gameVariables.setValue(18, 99999);
-    // Max HP (id = 19) - set to 6
-    $gameVariables.setValue(19, 6);
+    $gameVariables.setValue(18, maxHP + 1);
   };
 
   const __setFullItems__ = function() {
@@ -135,7 +139,7 @@
     // Metal-Cutting Saw x99
     $gameParty._items[32] = 99;
     // Hookshot x99
-    $gameParty._items[33] = 99;
+    // $gameParty._items[33] = 99;
     // Police Station Key x99
     // $gameParty._items[42] = 99;
     // Nostalgic Flower x99
@@ -150,6 +154,8 @@
     // $gameParty._items[51] = 99;
     // Communications Kit x99
     // $gameParty._items[52] = 99;
+    // Subway Pass x99
+    // $gameParty._items[53] = 99;
     // Helios Module B
     // $gameParty._items[55] = 99;
     // Bathroom Seat Instructions
@@ -158,6 +164,24 @@
     // $gameParty._items[59] = 99;
     // Stacy's Diner Schematic
     // $gameParty._items[60] = 99;
+    // Strawberry Milkshake
+    $gameParty._items[66] = 99;
+    // Chocolate Milkshake
+    $gameParty._items[67] = 99;
+    // Blueberry Milkshake
+    $gameParty._items[68] = 99;
+    // Rootbeer Float
+    $gameParty._items[69] = 99;
+    // Strawberries [Stacy]
+    $gameParty._items[70] = 99;
+    // Blueberries [Stacy]
+    $gameParty._items[71] = 99;
+    // Chocolate [Stacy]
+    $gameParty._items[72] = 99;
+    // Milk [Stacy]
+    $gameParty._items[73] = 99;
+    // Silk Bra
+    // $gameParty._items[80] = 99;
   };
 
   const __cheatInjection__ = function() {
@@ -181,6 +205,16 @@
     let text = new PIXI.Text('', __createDefaultTextStyle__());
     text._text = __createSpeedMultiplierMessageBoilerplate__(speed_multiplier);
     text.x = 5;
+    text.alpha = 0;
+    text.updateText();
+    return text;
+  };
+
+  function __buildCheatScriptInfo__() {
+    let text = new PIXI.Text('', __createDefaultTextStyle__());
+    text._text = `Cheat is activated. Support Game Version: ${supported_game_version}`;
+    text.x = 5;
+    text.alpha = 1.0;
     text.updateText();
     return text;
   };
@@ -188,11 +222,31 @@
   function __updateSpeedChangeInfo__(speedMultiplier) {
     const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
     __updateSpeedChangeInfoMessage__(text);
+    __registerSpeedChangeInfoFadeEffect__();
   };
 
   function __updateSpeedChangeInfoMessage__(text) {
     SceneManager._scene.speedChangeInfo._text = text;
+    SceneManager._scene.speedChangeInfo.alpha = 3.0;
     SceneManager._scene.speedChangeInfo.updateText();
+  };
+
+  function __registerSpeedChangeInfoFadeEffect__() {
+    if(fadeEffectHandlerId != -1) {
+      clearInterval(fadeEffectHandlerId);  
+      fadeEffectHandlerId = -1;
+    }
+
+    fadeEffectHandlerId = setInterval(() => {
+      if(SceneManager._scene.speedChangeInfo !== undefined) {
+        if(SceneManager._scene.speedChangeInfo.alpha > 0) {
+          SceneManager._scene.speedChangeInfo.alpha -= 0.20
+        }
+      } else {
+        clearInterval(fadeEffectHandlerId);
+        fadeEffectHandlerId = -1;
+      }
+    }, 100);
   };
 
   // Hook Scene_Map::update method
@@ -219,7 +273,24 @@
     __monitorCustomInput__();
   };
 
-  // Hook  SceneManager.updateMain method
+  // Hook Scene_Title::create method
+  const Hook__Scene_Title__create = Scene_Title.prototype.create;
+  Scene_Title.prototype.create = function() {
+    Hook__Scene_Title__create.call(this, arguments);
+    this.cheatScriptInfo = __buildCheatScriptInfo__();
+    this.addChild(this.cheatScriptInfo);
+  };
+
+  // Hook Window_Message::updateInput method
+  const Hook__Window_Message__updateInput = Window_Message.prototype.updateInput;
+  Window_Message.prototype.updateInput = function() {
+    let isUpdated = Hook__Window_Message__updateInput.call(this, arguments);
+    __monitorCustomInputSetup__();
+    isUpdated |= __monitorCustomInput__();
+    return isUpdated;
+  };
+
+  // Hook SceneManager.updateMain method
   const Hook__SceneManager__updateMain = SceneManager.updateMain;
   SceneManager.updateMain = function() {
     if (Utils.isMobileSafari()) {
