@@ -69,10 +69,10 @@
   };
 
   const __setFullHP__ = function() {
+    // Max HP (id = 19)
+    const maxHP = $gameVariables.value(19);
     // Current HP (id = 18) - set to 99999
-    $gameVariables.setValue(18, 99999);
-    // Max HP (id = 19) - set to 6
-    $gameVariables.setValue(19, 6);
+    $gameVariables.setValue(18, maxHP + 1);
   };
 
   const __setFullItems__ = function() {
