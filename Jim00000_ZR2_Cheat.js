@@ -30,6 +30,7 @@
 
 (() => {
   let speed_multiplier = 1.0;
+  let fadeEffectHandlerId = -1;
   const speed_multiplier_virtualkey = 117  // F6
   const speed_multiplier_keyname = 'change_speed_multiplier';
 
@@ -201,6 +202,7 @@
     let text = new PIXI.Text('', __createDefaultTextStyle__());
     text._text = __createSpeedMultiplierMessageBoilerplate__(speed_multiplier);
     text.x = 5;
+    text.alpha = 0;
     text.updateText();
     return text;
   };
@@ -208,11 +210,31 @@
   function __updateSpeedChangeInfo__(speedMultiplier) {
     const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
     __updateSpeedChangeInfoMessage__(text);
+    __registerSpeedChangeInfoFadeEffect__();
   };
 
   function __updateSpeedChangeInfoMessage__(text) {
     SceneManager._scene.speedChangeInfo._text = text;
+    SceneManager._scene.speedChangeInfo.alpha = 3.0;
     SceneManager._scene.speedChangeInfo.updateText();
+  };
+
+  function __registerSpeedChangeInfoFadeEffect__() {
+    if(fadeEffectHandlerId != -1) {
+      clearInterval(fadeEffectHandlerId);  
+      fadeEffectHandlerId = -1;
+    }
+
+    fadeEffectHandlerId = setInterval(() => {
+      if(SceneManager._scene.speedChangeInfo !== undefined) {
+        if(SceneManager._scene.speedChangeInfo.alpha > 0) {
+          SceneManager._scene.speedChangeInfo.alpha -= 0.20
+        }
+      } else {
+        clearInterval(fadeEffectHandlerId);
+        fadeEffectHandlerId = -1;
+      }
+    }, 100);
   };
 
   // Hook Scene_Map::update method
