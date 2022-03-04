@@ -2,14 +2,8 @@
 
 <div>
     <p align="left">
-        <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/issues">
-            <img src="https://img.shields.io/github/issues/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub issues">
-        </a>
         <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases/latest">
             <img src="https://img.shields.io/github/v/release/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub release (latest by date)">
-        </a>
-        <a>
-            <img src="https://img.shields.io/github/downloads/Jim00000/Zombies-Retreat-2-Cheat-Script/total?style=flat-square" alt="GitHub all releases download">
         </a>
         <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/blob/master/LICENSE">
             <img src="https://img.shields.io/github/license/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub License">
