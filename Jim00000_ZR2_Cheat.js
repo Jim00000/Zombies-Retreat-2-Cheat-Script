@@ -23,15 +23,15 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.5.2
-// ▶ Update         : 12.25.2021
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.6.2
+// ▶ Update         : 03.05.2022
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
 (() => {
   let speed_multiplier = 1.0;
   let fadeEffectHandlerId = -1;
-  const supported_game_version = "beta 0.5.2"
+  const supported_game_version = "beta 0.6.2"
   const speed_multiplier_virtualkey = 117  // F6
   const speed_multiplier_keyname = 'change_speed_multiplier';
 
