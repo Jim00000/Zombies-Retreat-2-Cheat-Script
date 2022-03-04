@@ -114,7 +114,7 @@
     // $gameParty._items[16] = 99;
     // Crafting Manual (Advanced) x99
     // $gameParty._items[17] = 99;
-    // Distillery Book x99
+    // Bartender's Basics x99
     // $gameParty._items[18] = 99;
     // Pistol x99
     // $gameParty._items[19] = 99;
@@ -154,7 +154,7 @@
     // $gameParty._items[51] = 99;
     // Communications Kit x99
     // $gameParty._items[52] = 99;
-    // Subway Pass x99
+    // Subway Blue Card x99
     // $gameParty._items[53] = 99;
     // Helios Module B
     // $gameParty._items[55] = 99;
