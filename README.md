@@ -2,40 +2,17 @@
 
 <div>
     <p align="left">
-        <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/issues">
-            <img src="https://img.shields.io/github/issues/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub issues">
-        </a>
-        <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases/latest">
-            <img src="https://img.shields.io/github/v/release/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub release (latest by date)">
-        </a>
-        <a>
-            <img src="https://img.shields.io/github/downloads/Jim00000/Zombies-Retreat-2-Cheat-Script/total?style=flat-square" alt="GitHub all releases download">
-        </a>
         <a href="https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/blob/master/LICENSE">
             <img src="https://img.shields.io/github/license/Jim00000/Zombies-Retreat-2-Cheat-Script?style=flat-square" alt="GitHub License">
         </a>
     </p>
 </div>
 
-This repository aims to provide a simple solution cheating in the game Zombie's Retreat 2: Gridlocked. Visit https://sirensdomain.itch.io/zombies-retreat-2 for more information about the game Zombie's Retreat 2.
+## How to enable DevTools (F12 to open a debug console)
 
-## Cheat List
-
-- Speedhack (x1, x1.5, x2, x2.5, x3) (In Game map, or while message window is showing)
-- No damage / Full HP
-- Full Items
-
-## Install
-
-Find the matched game version tag, download the repository, replace www/js/plugins.js by my plugins.js and put Jim00000_ZR2_Cheat.js under www/js/plugins/ directory.
-
-You should find "cheat is activated." message in title scene as following:
-
-![](https://i.imgur.com/4Dea18H.png)
-
-## User guide
-
-`No damage` and `Full Items` are activated automatically. Use F6 to change Speedhack modes (Loop : x1 → x1.5 → x2 → x2.5 → x3 → x1).
+1. Download [nwjs-sdk-v0.38.3-win-x64.zip](https://dl.nwjs.io/v0.38.3/nwjs-sdk-v0.38.3-win-x64.zip)
+2. Unzip **nwjs-sdk-v0.38.3-win-x64.zip**, put all contents of **nwjs-sdk-v0.38.3-win-x64.zip** into Zombie's Retreat 2 - Beta X.Y.Z/ and replace all of the files with the same filename.
+3. Use **nw.exe** to run the game. Use F12 to open DevTools console.
 
 ## License
 
