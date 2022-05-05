@@ -1,6 +1,6 @@
 {
   /*
-  Copyright (C) 2021 Jim00000
+  Copyright (C) 2021-2022 Jim00000
 
   This file is part of Zombies-Retreat-2-Cheat-Script.
 
