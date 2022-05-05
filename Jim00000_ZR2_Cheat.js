@@ -228,6 +228,7 @@
     let text = new PIXI.Text('', __createDefaultTextStyle__());
     text._text = `Cheat is activated. Support Game Version: ${supported_game_version}`;
     text.x = 5;
+    text.style.fill = 0xffff00; // yellow color
     text.alpha = 1.0;
     text.updateText();
     return text;
