@@ -1,6 +1,6 @@
 {
   /*
-  Copyright (C) 2021 Jim00000
+  Copyright (C) 2021-2022 Jim00000
 
   This file is part of Zombies-Retreat-2-Cheat-Script.
 
@@ -23,23 +23,31 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.6.2
-// ▶ Update         : 03.05.2022
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.7.2
+// ▶ Update         : 05.06.2022
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
 (() => {
   let speed_multiplier = 1.0;
   let fadeEffectHandlerId = -1;
-  const supported_game_version = "beta 0.6.2"
+  const supported_game_version = "beta 0.7.2"
   const speed_multiplier_virtualkey = 117  // F6
+  const freezed_zombie_virtualkey = 118  // F7
+  const remove_all_enemies_virtualkey = 119  // F8
   const speed_multiplier_keyname = 'change_speed_multiplier';
+  const freezed_zombie_keyname = 'toggle_zomble_movement_freezed';
+  const remove_all_enemies_keyname = 'remove_all_enemies';
+  const enemy_freeze_switch_id = 7;
 
   // register F6 key to change speed multiplier
   Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
+  // register F7 key to freeze zombie's movement
+  Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
+  Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
 
   const __onSpeedMultiplierChange__ = function() {
-    let final_speed_multiplier = speed_multiplier + 0.5;
+    let final_speed_multiplier = speed_multiplier + 0.25;
     if (final_speed_multiplier > 3.5) {
       final_speed_multiplier = 1.0;
     }
@@ -47,14 +55,69 @@
     __updateSpeedChangeInfo__(speed_multiplier);
   };
 
+  const __onZombieMovementFreezedChange__ = function() {
+    const isEnabled = $gameSwitches.value(enemy_freeze_switch_id);
+    $gameSwitches.setValue(enemy_freeze_switch_id, !isEnabled);
+    __updateZombieMovementFreezedChangedInfo__();
+  };
+
+  const __onRemoveAllEnemiesTriggered__ = function() {
+    let enemy_removed_count = 0;
+    $gameMap.events().forEach(event => {
+      // For debugging
+      if (event != null && event instanceof Game_Event && event.characterName().length > 0)
+      {
+        console.log(event.characterName());
+      }
+
+      if (event != null && event instanceof Game_Event && __isEnemyCharacterEvent__(event)) {
+        // Update event's self switch A,B,D to true to mark enemy in killed state to avoid respawning
+        $gameSelfSwitches.setValue([$gameMap.mapId(), event.eventId(), 'A'], true);
+        $gameSelfSwitches.setValue([$gameMap.mapId(), event.eventId(), 'B'], true);
+        $gameSelfSwitches.setValue([$gameMap.mapId(), event.eventId(), 'D'], true);
+        event.erase();
+        enemy_removed_count += 1;
+      }
+    });
+    __updateRemoveAllEnemiesInfo__(enemy_removed_count);
+  };
+
+  const __isEnemyCharacterEvent__ = function(event) {
+    const name = event.characterName();
+    const enemy_name_list = [
+      "Male_Zombies",
+      "Male_Zombies_Gore",
+      "PHC_Em-Serv-ZomA2",
+      "PHC_Em-Serv-ZomGoreB2",
+      "PHC_Em-Serv-ZomB2",
+      "PHC_Em-Serv-ZomGoreA2",
+      "Zombies_Med1"
+    ];
+    let isEnemy = false;
+    enemy_name_list.forEach(candicate => {
+      isEnemy |= (name === candicate);
+    });
+    return isEnemy;
+  };
+
   const __monitorCustomInputSetup__ = function() {
     Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
+    Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
+    Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
   };
 
   const __monitorCustomInput__ = function() {
     if (!SceneManager.isSceneChanging()) {
       if (Input.isTriggered(speed_multiplier_keyname)) {
         __onSpeedMultiplierChange__();
+        return true;
+      }
+      if (Input.isTriggered(freezed_zombie_keyname)) {
+        __onZombieMovementFreezedChange__();
+        return true;
+      }
+      if (Input.isTriggered(remove_all_enemies_keyname)) {
+        __onRemoveAllEnemiesTriggered__();
         return true;
       }
     }
@@ -140,6 +203,8 @@
     $gameParty._items[32] = 99;
     // Hookshot x99
     // $gameParty._items[33] = 99;
+    // Z-Cola x99
+    $gameParty._items[34] = 99;
     // Police Station Key x99
     // $gameParty._items[42] = 99;
     // Nostalgic Flower x99
@@ -180,8 +245,20 @@
     $gameParty._items[72] = 99;
     // Milk [Stacy]
     $gameParty._items[73] = 99;
+    // Digital Camera
+    // $gameParty._items[79] = 99;
     // Silk Bra
     // $gameParty._items[80] = 99;
+    // Scrap Wood (x3)
+    $gameParty._items[82] = 99;
+    // Scrap Metal (x3)
+    $gameParty._items[83] = 99;
+    // Scrap Brick (x3)
+    $gameParty._items[84] = 99;
+    // Water (x3)
+    $gameParty._items[85] = 99;
+    // Food (Grain) (x3)
+    $gameParty._items[86] = 99;
   };
 
   const __cheatInjection__ = function() {
@@ -214,6 +291,7 @@
     let text = new PIXI.Text('', __createDefaultTextStyle__());
     text._text = `Cheat is activated. Support Game Version: ${supported_game_version}`;
     text.x = 5;
+    text.style.fill = 0xffff00; // yellow color
     text.alpha = 1.0;
     text.updateText();
     return text;
@@ -221,17 +299,29 @@
 
   function __updateSpeedChangeInfo__(speedMultiplier) {
     const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
-    __updateSpeedChangeInfoMessage__(text);
-    __registerSpeedChangeInfoFadeEffect__();
+    __updateNotificationMessage__(text);
+    __registerNotificationFadeEffect__();
   };
 
-  function __updateSpeedChangeInfoMessage__(text) {
+  function __updateZombieMovementFreezedChangedInfo__() {
+    const text = `Freeze zombie's movement : ${$gameSwitches.value(enemy_freeze_switch_id) ? "Enable" : "Disable"}`
+    __updateNotificationMessage__(text);
+    __registerNotificationFadeEffect__();
+  };
+
+  function __updateRemoveAllEnemiesInfo__(removed_count) {
+    const text = `Remove ${removed_count} enemies`
+    __updateNotificationMessage__(text);
+    __registerNotificationFadeEffect__();
+  };
+
+  function __updateNotificationMessage__(text) {
     SceneManager._scene.speedChangeInfo._text = text;
     SceneManager._scene.speedChangeInfo.alpha = 3.0;
     SceneManager._scene.speedChangeInfo.updateText();
   };
 
-  function __registerSpeedChangeInfoFadeEffect__() {
+  function __registerNotificationFadeEffect__() {
     if(fadeEffectHandlerId != -1) {
       clearInterval(fadeEffectHandlerId);  
       fadeEffectHandlerId = -1;
