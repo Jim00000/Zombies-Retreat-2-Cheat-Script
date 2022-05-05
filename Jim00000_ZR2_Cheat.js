@@ -33,10 +33,15 @@
   let fadeEffectHandlerId = -1;
   const supported_game_version = "beta 0.7.2"
   const speed_multiplier_virtualkey = 117  // F6
+  const freezed_zombie_virtualkey = 118  // F7
   const speed_multiplier_keyname = 'change_speed_multiplier';
+  const freezed_zombie_keyname = 'toggle_zomble_movement_freezed';
+  const enemy_freeze_switch_id = 7;
 
   // register F6 key to change speed multiplier
   Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
+  // register F7 key to freeze zombie's movement
+  Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
 
   const __onSpeedMultiplierChange__ = function() {
     let final_speed_multiplier = speed_multiplier + 0.25;
@@ -47,14 +52,25 @@
     __updateSpeedChangeInfo__(speed_multiplier);
   };
 
+  const __onZombieMovementFreezedChange__ = function() {
+    const isEnabled = $gameSwitches.value(enemy_freeze_switch_id);
+    $gameSwitches.setValue(enemy_freeze_switch_id, !isEnabled);
+    __updateZombieMovementFreezedChangedInfo__();
+  };
+
   const __monitorCustomInputSetup__ = function() {
     Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
+    Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
   };
 
   const __monitorCustomInput__ = function() {
     if (!SceneManager.isSceneChanging()) {
       if (Input.isTriggered(speed_multiplier_keyname)) {
         __onSpeedMultiplierChange__();
+        return true;
+      }
+      if (Input.isTriggered(freezed_zombie_keyname)) {
+        __onZombieMovementFreezedChange__();
         return true;
       }
     }
@@ -236,6 +252,12 @@
 
   function __updateSpeedChangeInfo__(speedMultiplier) {
     const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
+    __updateNotificationMessage__(text);
+    __registerNotificationFadeEffect__();
+  };
+
+  function __updateZombieMovementFreezedChangedInfo__() {
+    const text = `Freeze zombie's movement : ${$gameSwitches.value(enemy_freeze_switch_id) ? "Enable" : "Disable"}`
     __updateNotificationMessage__(text);
     __registerNotificationFadeEffect__();
   };
