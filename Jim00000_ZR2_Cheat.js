@@ -140,6 +140,8 @@
     $gameParty._items[32] = 99;
     // Hookshot x99
     // $gameParty._items[33] = 99;
+    // Z-Cola x99
+    $gameParty._items[34] = 99;
     // Police Station Key x99
     // $gameParty._items[42] = 99;
     // Nostalgic Flower x99
@@ -180,8 +182,20 @@
     $gameParty._items[72] = 99;
     // Milk [Stacy]
     $gameParty._items[73] = 99;
+    // Digital Camera
+    // $gameParty._items[79] = 99;
     // Silk Bra
     // $gameParty._items[80] = 99;
+    // Scrap Wood (x3)
+    $gameParty._items[82] = 99;
+    // Scrap Metal (x3)
+    $gameParty._items[83] = 99;
+    // Scrap Brick (x3)
+    $gameParty._items[84] = 99;
+    // Water (x3)
+    $gameParty._items[85] = 99;
+    // Food (Grain) (x3)
+    $gameParty._items[86] = 99;
   };
 
   const __cheatInjection__ = function() {
