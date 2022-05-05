@@ -236,17 +236,17 @@
 
   function __updateSpeedChangeInfo__(speedMultiplier) {
     const text = __createSpeedMultiplierMessageBoilerplate__(speedMultiplier);
-    __updateSpeedChangeInfoMessage__(text);
-    __registerSpeedChangeInfoFadeEffect__();
+    __updateNotificationMessage__(text);
+    __registerNotificationFadeEffect__();
   };
 
-  function __updateSpeedChangeInfoMessage__(text) {
+  function __updateNotificationMessage__(text) {
     SceneManager._scene.speedChangeInfo._text = text;
     SceneManager._scene.speedChangeInfo.alpha = 3.0;
     SceneManager._scene.speedChangeInfo.updateText();
   };
 
-  function __registerSpeedChangeInfoFadeEffect__() {
+  function __registerNotificationFadeEffect__() {
     if(fadeEffectHandlerId != -1) {
       clearInterval(fadeEffectHandlerId);  
       fadeEffectHandlerId = -1;
