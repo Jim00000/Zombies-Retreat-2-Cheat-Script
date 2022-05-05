@@ -34,14 +34,17 @@
   const supported_game_version = "beta 0.7.2"
   const speed_multiplier_virtualkey = 117  // F6
   const freezed_zombie_virtualkey = 118  // F7
+  const remove_all_enemies_virtualkey = 119  // F8
   const speed_multiplier_keyname = 'change_speed_multiplier';
   const freezed_zombie_keyname = 'toggle_zomble_movement_freezed';
+  const remove_all_enemies_keyname = 'remove_all_enemies';
   const enemy_freeze_switch_id = 7;
 
   // register F6 key to change speed multiplier
   Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
   // register F7 key to freeze zombie's movement
   Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
+  Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
 
   const __onSpeedMultiplierChange__ = function() {
     let final_speed_multiplier = speed_multiplier + 0.25;
@@ -58,9 +61,49 @@
     __updateZombieMovementFreezedChangedInfo__();
   };
 
+  const __onRemoveAllEnemiesTriggered__ = function() {
+    let enemy_removed_count = 0;
+    $gameMap.events().forEach(event => {
+      // For debugging
+      if (event != null && event instanceof Game_Event && event.characterName().length > 0)
+      {
+        console.log(event.characterName());
+      }
+
+      if (event != null && event instanceof Game_Event && __isEnemyCharacterEvent__(event)) {
+        // Update event's self switch A,B,D to true to mark enemy in killed state to avoid respawning
+        $gameSelfSwitches.setValue([$gameMap.mapId(), event.eventId(), 'A'], true);
+        $gameSelfSwitches.setValue([$gameMap.mapId(), event.eventId(), 'B'], true);
+        $gameSelfSwitches.setValue([$gameMap.mapId(), event.eventId(), 'D'], true);
+        event.erase();
+        enemy_removed_count += 1;
+      }
+    });
+    __updateRemoveAllEnemiesInfo__(enemy_removed_count);
+  };
+
+  const __isEnemyCharacterEvent__ = function(event) {
+    const name = event.characterName();
+    const enemy_name_list = [
+      "Male_Zombies",
+      "Male_Zombies_Gore",
+      "PHC_Em-Serv-ZomA2",
+      "PHC_Em-Serv-ZomGoreB2",
+      "PHC_Em-Serv-ZomB2",
+      "PHC_Em-Serv-ZomGoreA2",
+      "Zombies_Med1"
+    ];
+    let isEnemy = false;
+    enemy_name_list.forEach(candicate => {
+      isEnemy |= (name === candicate);
+    });
+    return isEnemy;
+  };
+
   const __monitorCustomInputSetup__ = function() {
     Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
     Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
+    Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
   };
 
   const __monitorCustomInput__ = function() {
@@ -71,6 +114,10 @@
       }
       if (Input.isTriggered(freezed_zombie_keyname)) {
         __onZombieMovementFreezedChange__();
+        return true;
+      }
+      if (Input.isTriggered(remove_all_enemies_keyname)) {
+        __onRemoveAllEnemiesTriggered__();
         return true;
       }
     }
@@ -258,6 +305,12 @@
 
   function __updateZombieMovementFreezedChangedInfo__() {
     const text = `Freeze zombie's movement : ${$gameSwitches.value(enemy_freeze_switch_id) ? "Enable" : "Disable"}`
+    __updateNotificationMessage__(text);
+    __registerNotificationFadeEffect__();
+  };
+
+  function __updateRemoveAllEnemiesInfo__(removed_count) {
+    const text = `Remove ${removed_count} enemies`
     __updateNotificationMessage__(text);
     __registerNotificationFadeEffect__();
   };
