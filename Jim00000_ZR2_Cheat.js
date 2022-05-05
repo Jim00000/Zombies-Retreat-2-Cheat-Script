@@ -39,7 +39,7 @@
   Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
 
   const __onSpeedMultiplierChange__ = function() {
-    let final_speed_multiplier = speed_multiplier + 0.5;
+    let final_speed_multiplier = speed_multiplier + 0.25;
     if (final_speed_multiplier > 3.5) {
       final_speed_multiplier = 1.0;
     }
