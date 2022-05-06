@@ -32,13 +32,17 @@
 (() => {
     let speed_multiplier = 1.0;
     let fadeEffectHandlerId = -1;
+    let is_dark_scene_disabled = false;
+    let original_color_tone = [];
     const supported_game_version = 'beta 0.7.2'
     const speed_multiplier_virtualkey = 117    // F6
     const freezed_zombie_virtualkey = 118      // F7
     const remove_all_enemies_virtualkey = 119  // F8
+    const toggle_dark_scene_virtualkey = 121   // F10
     const speed_multiplier_keyname = 'change_speed_multiplier';
     const freezed_zombie_keyname = 'toggle_zomble_movement_freezed';
     const remove_all_enemies_keyname = 'remove_all_enemies';
+    const toggle_dark_scene_keyname = 'toggle_dark_scene';
     const enemy_freeze_switch_id = 7;
 
     // register F6 key to change speed multiplier
@@ -46,6 +50,8 @@
     // register F7 key to freeze zombie's movement
     Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
     Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
+    // register F10 key to toggle dark scene
+    Input.keyMapper[toggle_dark_scene_virtualkey] = toggle_dark_scene_keyname;
 
     function __onSpeedMultiplierChange__() {
         let final_speed_multiplier = speed_multiplier + 0.25;
@@ -88,6 +94,20 @@
         __updateRemoveAllEnemiesInfo__(enemy_removed_count);
     };
 
+    function __onToggleDarkSceneTriggered__() {
+        is_dark_scene_disabled = !is_dark_scene_disabled;
+        if (is_dark_scene_disabled === false) {
+            // set current color tone only if original color tone exists
+            if (original_color_tone.length > 0) {
+                $gameScreen._tone = original_color_tone.clone();
+            }
+            // Ditch current saved color tone
+            original_color_tone = [];
+            __enableTerraxLightingEffect__();
+        }
+        __updateDisableDarkSceneInfo__();
+    };
+
     function __isEnemyCharacterEvent__(event) {
         const name = event.characterName();
         const enemy_name_list = [
@@ -107,6 +127,8 @@
         Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
         Input.keyMapper[remove_all_enemies_virtualkey] =
             remove_all_enemies_keyname;
+        Input.keyMapper[toggle_dark_scene_virtualkey] =
+            toggle_dark_scene_keyname;
     };
 
     function __monitorCustomInput__() {
@@ -123,6 +145,10 @@
                 __onRemoveAllEnemiesTriggered__();
                 return true;
             }
+            if (Input.isTriggered(toggle_dark_scene_keyname)) {
+                __onToggleDarkSceneTriggered__();
+                return true;
+            }
         }
         return false;
     };
@@ -131,6 +157,9 @@
         __setMaxMoney__();
         __setFullHP__();
         __setFullItems__();
+        if (is_dark_scene_disabled) {
+            __disableDarkScene__();
+        }
     };
 
     function __setMaxMoney__() {
@@ -264,6 +293,39 @@
         $gameParty._items[86] = 99;
     };
 
+    function __disableDarkScene__() {
+        // Keep original color tone
+        if ($gameScreen.tone().toString() !== '0,0,0,0') {
+            original_color_tone = $gameScreen.tone().clone();
+        }
+        // Set color tone to 0 to prevent dim scene
+        $gameScreen.tone().fill(0);
+        // Disable Terrax lighting script if exists
+        __disableTerraxLightingEffect__();
+    };
+
+    function __disableTerraxLightingEffect__() {
+        if ($gameVariables.SetStopScript !== undefined) {
+            $gameVariables.SetStopScript(true);
+            __disableTerraxLightingEffect__ = function() {
+                $gameVariables.SetStopScript(true);
+            };
+        } else {
+            __disableTerraxLightingEffect__ = function() {};
+        }
+    };
+
+    function __enableTerraxLightingEffect__() {
+        if ($gameVariables.SetStopScript !== undefined) {
+            $gameVariables.SetStopScript(false);
+            __enableTerraxLightingEffect__ = function() {
+                $gameVariables.SetStopScript(false);
+            };
+        } else {
+            __enableTerraxLightingEffect__ = function() {};
+        }
+    };
+
     function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
         $gameTemp._isPlaytest = true;
@@ -322,6 +384,13 @@
         __registerNotificationFadeEffect__();
     };
 
+    function __updateDisableDarkSceneInfo__() {
+        const text =
+            `${is_dark_scene_disabled ? 'Disable' : 'Enable'} dark scene effect`
+        __updateNotificationMessage__(text);
+        __registerNotificationFadeEffect__();
+    };
+
     function __updateNotificationMessage__(text) {
         SceneManager._scene.speedChangeInfo._text = text;
         SceneManager._scene.speedChangeInfo.alpha = 3.0;
@@ -360,6 +429,8 @@
         Hook__Scene_Map__createDisplayObjects.call(this, arguments);
         this.speedChangeInfo = __buildSpeedChangeInfo__();
         this.addChild(this.speedChangeInfo);
+        // Ditch old map's color tone
+        original_color_tone = [];
     };
 
     // Hook Scene_Title::create method
