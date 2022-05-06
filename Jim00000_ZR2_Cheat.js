@@ -30,6 +30,7 @@
 // --------------------------------------------------------------------------------
 
 (() => {
+    let last_frame_count = 0;
     let speed_multiplier = 1.0;
     let fadeEffectHandlerId = -1;
     let is_zombie_freezed = false;
@@ -164,14 +165,19 @@
     };
 
     function __handleCheat__() {
-        __setMaxMoney__();
-        __setFullHP__();
-        __setFullItems__();
-        if (is_dark_scene_disabled) {
-            __disableDarkScene__();
-        }
-        if (is_zombie_freezed) {
-            __onZombieMovementFreezedTriggered__();
+        // update every 30 frame (~0.5 seconds)
+        if (Graphics.frameCount - last_frame_count > 30) {
+            __setMaxMoney__();
+            __setFullHP__();
+            __setFullItems__();
+            if (is_dark_scene_disabled) {
+                __disableDarkScene__();
+            }
+            if (is_zombie_freezed) {
+                __onZombieMovementFreezedTriggered__();
+            }
+            // Update frame count
+            last_frame_count = Graphics.frameCount;
         }
     };
 
@@ -444,6 +450,7 @@
         this.addChild(this.speedChangeInfo);
         // Ditch old map's color tone
         original_color_tone = [];
+        last_frame_count = Graphics.frameCount;
     };
 
     // Hook Scene_Title::create method
