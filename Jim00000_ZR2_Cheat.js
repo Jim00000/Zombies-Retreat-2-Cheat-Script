@@ -47,7 +47,7 @@
     Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
     Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
 
-    const __onSpeedMultiplierChange__ = function() {
+    function __onSpeedMultiplierChange__() {
         let final_speed_multiplier = speed_multiplier + 0.25;
         if (final_speed_multiplier > 3.5) {
             final_speed_multiplier = 1.0;
@@ -56,13 +56,13 @@
         __updateSpeedChangeInfo__(speed_multiplier);
     };
 
-    const __onZombieMovementFreezedChange__ = function() {
+    function __onZombieMovementFreezedChange__() {
         const isEnabled = $gameSwitches.value(enemy_freeze_switch_id);
         $gameSwitches.setValue(enemy_freeze_switch_id, !isEnabled);
         __updateZombieMovementFreezedChangedInfo__();
     };
 
-    const __onRemoveAllEnemiesTriggered__ = function() {
+    function __onRemoveAllEnemiesTriggered__() {
         let enemy_removed_count = 0;
         $gameMap.events().forEach(event => {
             // For debugging
@@ -88,7 +88,7 @@
         __updateRemoveAllEnemiesInfo__(enemy_removed_count);
     };
 
-    const __isEnemyCharacterEvent__ = function(event) {
+    function __isEnemyCharacterEvent__(event) {
         const name = event.characterName();
         const enemy_name_list = [
             'Male_Zombies', 'Male_Zombies_Gore', 'PHC_Em-Serv-ZomA2',
@@ -102,14 +102,14 @@
         return isEnemy;
     };
 
-    const __monitorCustomInputSetup__ = function() {
+    function __monitorCustomInputSetup__() {
         Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
         Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
         Input.keyMapper[remove_all_enemies_virtualkey] =
             remove_all_enemies_keyname;
     };
 
-    const __monitorCustomInput__ = function() {
+    function __monitorCustomInput__() {
         if (!SceneManager.isSceneChanging()) {
             if (Input.isTriggered(speed_multiplier_keyname)) {
                 __onSpeedMultiplierChange__();
@@ -127,25 +127,25 @@
         return false;
     };
 
-    const __handleCheat__ = function() {
+    function __handleCheat__() {
         __setMaxMoney__();
         __setFullHP__();
         __setFullItems__();
     };
 
-    const __setMaxMoney__ = function() {
+    function __setMaxMoney__() {
         // Set money 99999999999
         $gameParty._gold = 99999999999;
     };
 
-    const __setFullHP__ = function() {
+    function __setFullHP__() {
         // Max HP (id = 19)
         const maxHP = $gameVariables.value(19);
         // Current HP (id = 18) - set to 99999
         $gameVariables.setValue(18, maxHP + 1);
     };
 
-    const __setFullItems__ = function() {
+    function __setFullItems__() {
         // Scrap Metal x99
         $gameParty._items[1] = 99;
         // Scrap Wood x99
@@ -264,7 +264,7 @@
         $gameParty._items[86] = 99;
     };
 
-    const __cheatInjection__ = function() {
+    function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
         $gameTemp._isPlaytest = true;
 
@@ -279,7 +279,7 @@
 
     function __createSpeedMultiplierMessageBoilerplate__(speedMultiplier) {
         return `Speed Multiplier : ${speedMultiplier}x`;
-    }
+    };
 
     function __buildSpeedChangeInfo__() {
         let text = new PIXI.Text('', __createDefaultTextStyle__());
