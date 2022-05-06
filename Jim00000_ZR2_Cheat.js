@@ -32,15 +32,16 @@
 (() => {
     let speed_multiplier = 1.0;
     let fadeEffectHandlerId = -1;
+    let is_zombie_freezed = false;
     let is_dark_scene_disabled = false;
     let original_color_tone = [];
     const supported_game_version = 'beta 0.7.2'
-    const speed_multiplier_virtualkey = 117    // F6
-    const freezed_zombie_virtualkey = 118      // F7
-    const remove_all_enemies_virtualkey = 119  // F8
-    const toggle_dark_scene_virtualkey = 121   // F10
+    const speed_multiplier_virtualkey = 117        // F6
+    const freeze_zombie_movement_virtualkey = 118  // F7
+    const remove_all_enemies_virtualkey = 119      // F8
+    const toggle_dark_scene_virtualkey = 121       // F10
     const speed_multiplier_keyname = 'change_speed_multiplier';
-    const freezed_zombie_keyname = 'toggle_zomble_movement_freezed';
+    const freeze_zombie_movement_keyname = 'freeze_zomble_movement';
     const remove_all_enemies_keyname = 'remove_all_enemies';
     const toggle_dark_scene_keyname = 'toggle_dark_scene';
     const enemy_freeze_switch_id = 7;
@@ -48,7 +49,8 @@
     // register F6 key to change speed multiplier
     Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
     // register F7 key to freeze zombie's movement
-    Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
+    Input.keyMapper[freeze_zombie_movement_virtualkey] =
+        freeze_zombie_movement_keyname;
     Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
     // register F10 key to toggle dark scene
     Input.keyMapper[toggle_dark_scene_virtualkey] = toggle_dark_scene_keyname;
@@ -62,10 +64,16 @@
         __updateSpeedChangeInfo__(speed_multiplier);
     };
 
-    function __onZombieMovementFreezedChange__() {
-        const isEnabled = $gameSwitches.value(enemy_freeze_switch_id);
-        $gameSwitches.setValue(enemy_freeze_switch_id, !isEnabled);
-        __updateZombieMovementFreezedChangedInfo__();
+    function __onZombieMovementFreezedTriggered__() {
+        $gameMap.events().forEach(event => {
+            if (event != null && event instanceof Game_Event &&
+                __isEnemyCharacterEvent__(event)) {
+                event._moveType = 0;
+                event.canSeePlayer = () => {
+                    return false
+                };
+            }
+        });
     };
 
     function __onRemoveAllEnemiesTriggered__() {
@@ -124,7 +132,8 @@
 
     function __monitorCustomInputSetup__() {
         Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
-        Input.keyMapper[freezed_zombie_virtualkey] = freezed_zombie_keyname;
+        Input.keyMapper[freeze_zombie_movement_virtualkey] =
+            freeze_zombie_movement_keyname;
         Input.keyMapper[remove_all_enemies_virtualkey] =
             remove_all_enemies_keyname;
         Input.keyMapper[toggle_dark_scene_virtualkey] =
@@ -137,8 +146,9 @@
                 __onSpeedMultiplierChange__();
                 return true;
             }
-            if (Input.isTriggered(freezed_zombie_keyname)) {
-                __onZombieMovementFreezedChange__();
+            if (Input.isTriggered(freeze_zombie_movement_keyname)) {
+                is_zombie_freezed = !is_zombie_freezed;
+                __updateZombieMovementFreezedChangedInfo__();
                 return true;
             }
             if (Input.isTriggered(remove_all_enemies_keyname)) {
@@ -159,6 +169,9 @@
         __setFullItems__();
         if (is_dark_scene_disabled) {
             __disableDarkScene__();
+        }
+        if (is_zombie_freezed) {
+            __onZombieMovementFreezedTriggered__();
         }
     };
 
@@ -328,7 +341,7 @@
 
     function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
-        $gameTemp._isPlaytest = true;
+        //$gameTemp._isPlaytest = true;
 
         // Cheating
         __handleCheat__();
@@ -372,8 +385,8 @@
     };
 
     function __updateZombieMovementFreezedChangedInfo__() {
-        const text = `Freeze zombie's movement : ${
-            $gameSwitches.value(enemy_freeze_switch_id) ? 'Enable' : 'Disable'}`
+        const text = is_zombie_freezed ? `Freeze all zombie's movement` :
+                                         `All zombie can move right now`;
         __updateNotificationMessage__(text);
         __registerNotificationFadeEffect__();
     };
