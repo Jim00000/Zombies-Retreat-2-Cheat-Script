@@ -1,4 +1,4 @@
-# Cheat script for Zombie's Retreat 2: Gridlocked
+# Cheat for Zombie's Retreat 2: Gridlocked
 
 <div>
     <p align="left">
@@ -13,23 +13,25 @@
 
 This repository aims to provide a simple solution cheating in the game Zombie's Retreat 2: Gridlocked. Visit https://sirensdomain.itch.io/zombies-retreat-2 for more information about the game Zombie's Retreat 2.
 
-*Note: This cheat does not support Android version right now.*
+*Note: This cheat does not support Android version at the moment.*
 
 ## Cheat List
 
-- Speedhack (In Game map, or while message window is showing)
-- No damage / Full HP
-- Full Items
-- Freeze zombie's movement (Experimental)
+- Speedhack (in game map, or while message window is showing)
+- No damage / full HP
+- Full items except a few special items e.g. keys, gun, crafting manuals, event items
+- Freeze zombie's movement & you can pass through the zombies
 - Kill all zombies in current game map
+- Disable dark scene effect
+- Hint for some quests e.g. synthesize colored herbs
 
 ## Install
 
-Find the matched game version tag, download the repository, replace www/js/plugins.js by my plugins.js and put Jim00000_ZR2_Cheat.js under www/js/plugins/ directory.
+Find matched game version in [release page](https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases), download the source code, replace www/js/plugins.js by my plugins.js and put Jim00000_ZR2_Cheat.js under www/js/plugins/ directory.
 
-You should find "cheat is activated." message with yellow color in title scene as following:
+You should find "cheat is activated." message in title scene as following:
 
-![](https://i.imgur.com/QGiU32A.png)
+![url of image is broken](https://i.imgur.com/EoFEECi.png)
 
 ## User guide
 
@@ -37,7 +39,8 @@ You should find "cheat is activated." message with yellow color in title scene a
 - F6 to change game speedup multiplier (Loop : x1 → x1.25 → x1.5 → ... → x3.25 → x3.5 → x1).
 - F7 to toggle freezing zombies.
 - F8 to kill all zombies on the current map. Be very careful to use this cheat, some events might be stuck in some situations.
+- F10 to disable dark scene effect.
 
 ## License
 
-This software is under GNU General Public License v3.0. See LICENSE for more information.
+This software is under GNU General Public License v3.0. See [LICENSE](LICENSE) for more information.
