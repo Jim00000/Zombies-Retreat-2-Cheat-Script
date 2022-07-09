@@ -69,6 +69,13 @@
             if (event != null && event instanceof Game_Event &&
                 __isEnemyCharacterEvent__(event)) {
                 event._moveType = 0;
+                event._moveSpeed = 0;
+                event._chaseRange = 0;
+                event._chaseSpeed = 0;
+                event._trigger = 0;
+                event._chasePlayer = false;
+                event._seePlayer = false;
+                event.setThrough(true); // pass through the zombie
                 event.canSeePlayer = () => {
                     return false
                 };
