@@ -349,8 +349,19 @@
     };  // end of __cheatInjection__
 
     function __createDefaultTextStyle__() {
-        return new PIXI.TextStyle(
-            {fill: 'white', fontFamily: 'Times New Roman', fontSize: 16});
+        // Modify yourslef if you need a customized text style
+        // There is a good reference: https://pixijs.io/pixi-text-style/#
+        return new PIXI.TextStyle({
+            dropShadow: true,
+            dropShadowAlpha: 0.3,
+            dropShadowColor: '#9e9e9e',
+            fontFamily: 'Comic Sans MS',
+            fontSize: 18,
+            fontWeight: 600,
+            lineJoin: 'bevel',
+            stroke: 'white',
+            strokeThickness: 3
+        });
     };
 
     function __createSpeedMultiplierMessageBoilerplate__(speedMultiplier) {
@@ -371,8 +382,9 @@
         let text = new PIXI.Text('', __createDefaultTextStyle__());
         text._text = `Cheat is activated. Support Game Version: ${
             supported_game_version}`;
-        text.x = 5;
-        text.style.fill = 0xffff00;  // yellow color
+        text.style.fill = 0x000000;  // white color
+        text.x = 420;
+        text.y = Graphics.boxHeight - 15 - text.style.fontSize;
         text.alpha = 1.0;
         text.updateText();
         return text;
