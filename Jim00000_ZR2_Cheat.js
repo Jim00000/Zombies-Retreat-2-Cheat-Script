@@ -176,6 +176,8 @@
             if (is_zombie_freezed) {
                 __onZombieMovementFreezedTriggered__();
             }
+            // Tell the player hint if possible
+            __handlePuzzleHint__();
             // Update frame count
             last_frame_count = Graphics.frameCount;
         }
@@ -347,6 +349,28 @@
         }
     };
 
+    function __handlePuzzleHint__() {
+        let is_hint_enabled = false;
+        // Quest: Medicinal Mayhem (Synthesize herbs mission)
+        is_hint_enabled |=
+            __checkAndHandleMedicinalMayhemQuestSynthesizeHerbsHint__();
+        if (is_hint_enabled === false) {
+            __disableQuestHintInfo__();
+        }
+    };
+
+    function __checkAndHandleMedicinalMayhemQuestSynthesizeHerbsHint__() {
+        const medicine_quest_start = $gameSwitches.value(104);
+        const medicine_quest_complete = $gameSwitches.value(118);
+        const map_id = $gameMap.mapId();
+        if (medicine_quest_start === true && medicine_quest_complete === false && map_id === 53) {
+            __enableQuestHintInfo__();
+            __updateQuestHintMessage__('Hint: 1. Yellow 2. Blue 3. Yellow 4. Red 5. Blue 6. Red');
+            return true;
+        }
+        return false;
+    };
+
     function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
         //$gameTemp._isPlaytest = true;
@@ -395,6 +419,36 @@
         text.alpha = 1.0;
         text.updateText();
         return text;
+    };
+
+    function __buildQuestHintInfo__() {
+        let text = new PIXI.Text('', __createDefaultTextStyle__());
+        text._text = '';
+        text.alpha = 0.0;
+        text.x = 10;
+        text.y = Graphics.boxHeight - 15 - text.style.fontSize;
+        text.updateText();
+        return text;
+    };
+
+    function __enableQuestHintInfo__() {
+        const text = SceneManager._scene.questHintInfo;
+        text.alpha = 1.0;
+        text.updateText();
+    };
+
+    function __disableQuestHintInfo__() {
+        const text = SceneManager._scene.questHintInfo;
+        text._text = '';
+        text.alpha = 0.0;
+        text.updateText();
+    };
+
+    function __updateQuestHintMessage__(msg) {
+        const text = SceneManager._scene.questHintInfo;
+        text.text = msg;
+        text.alpha = 1.0;
+        text.updateText();
     };
 
     function __updateSpeedChangeInfo__(speedMultiplier) {
@@ -462,6 +516,8 @@
         Hook__Scene_Map__createDisplayObjects.call(this, arguments);
         this.speedChangeInfo = __buildSpeedChangeInfo__();
         this.addChild(this.speedChangeInfo);
+        this.questHintInfo = __buildQuestHintInfo__();
+        this.addChild(this.questHintInfo);
         // Ditch old map's color tone
         original_color_tone = [];
         last_frame_count = Graphics.frameCount;
