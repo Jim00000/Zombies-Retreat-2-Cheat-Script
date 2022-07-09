@@ -45,7 +45,6 @@
     const freeze_zombie_movement_keyname = 'freeze_zomble_movement';
     const remove_all_enemies_keyname = 'remove_all_enemies';
     const toggle_dark_scene_keyname = 'toggle_dark_scene';
-    const enemy_freeze_switch_id = 7;
 
     // register F6 key to change speed multiplier
     Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
@@ -80,12 +79,6 @@
     function __onRemoveAllEnemiesTriggered__() {
         let enemy_removed_count = 0;
         $gameMap.events().forEach(event => {
-            // For debugging
-            if (event != null && event instanceof Game_Event &&
-                event.characterName().length > 0) {
-                console.log(event.characterName());
-            }
-
             if (event != null && event instanceof Game_Event &&
                 __isEnemyCharacterEvent__(event)) {
                 // Update event's self switch A,B,D to true to mark enemy in
