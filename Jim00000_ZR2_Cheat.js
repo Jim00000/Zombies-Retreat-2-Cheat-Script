@@ -354,6 +354,8 @@
         // Quest: Medicinal Mayhem (Synthesize herbs mission)
         is_hint_enabled |=
             __checkAndHandleMedicinalMayhemQuestSynthesizeHerbsHint__();
+        is_hint_enabled |=
+            __checkAndHandleShowStoppersQuestPickArcadeMachineHint__();
         if (is_hint_enabled === false) {
             __disableQuestHintInfo__();
         }
@@ -365,7 +367,16 @@
         const map_id = $gameMap.mapId();
         if (medicine_quest_start === true && medicine_quest_complete === false && map_id === 53) {
             __enableQuestHintInfo__();
-            __updateQuestHintMessage__('Hint: 1. Yellow 2. Blue 3. Yellow 4. Red 5. Blue 6. Red');
+
+    function __checkAndHandleShowStoppersQuestPickArcadeMachineHint__() {
+        const arcade_quest_start = $gameSwitches.value(129);
+        const stacy_arcade_quest_complete = $gameSwitches.value(132);
+        const map_id = $gameMap.mapId();
+        if (arcade_quest_start === true &&
+            stacy_arcade_quest_complete === false && map_id === 26) {
+            __enableQuestHintInfo__();
+            __updateQuestHintMessage__(
+                'Hint: Purple → Pink → Teal → Pink → Purple → Red → Teal → Red');
             return true;
         }
         return false;
