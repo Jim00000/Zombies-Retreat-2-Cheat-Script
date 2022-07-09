@@ -75,7 +75,7 @@
                 event._trigger = 0;
                 event._chasePlayer = false;
                 event._seePlayer = false;
-                event.setThrough(true); // pass through the zombie
+                event.setThrough(true);  // pass through the zombie
                 event.canSeePlayer = () => {
                     return false
                 };
@@ -365,8 +365,15 @@
         const medicine_quest_start = $gameSwitches.value(104);
         const medicine_quest_complete = $gameSwitches.value(118);
         const map_id = $gameMap.mapId();
-        if (medicine_quest_start === true && medicine_quest_complete === false && map_id === 53) {
+        if (medicine_quest_start === true &&
+            medicine_quest_complete === false && map_id === 53) {
             __enableQuestHintInfo__();
+            __updateQuestHintMessage__(
+                'Hint: 1. Yellow 2. Blue 3. Yellow 4. Red 5. Blue 6. Red');
+            return true;
+        }
+        return false;
+    };
 
     function __checkAndHandleShowStoppersQuestPickArcadeMachineHint__() {
         const arcade_quest_start = $gameSwitches.value(129);
