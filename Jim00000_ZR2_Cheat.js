@@ -249,6 +249,8 @@
         // $gameParty._items[33] = 99;
         // Z-Cola x99
         $gameParty._items[34] = 99;
+        // Erotic Soap x99
+        // $gameParty._items[35] = 99;
         // Police Station Key x99
         // $gameParty._items[42] = 99;
         // Nostalgic Flower x99
