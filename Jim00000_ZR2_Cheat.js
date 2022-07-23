@@ -610,9 +610,12 @@ const zr2cheat = {
     // check the environment is desktop.
     // This cheat doesn't support mobile device.
     is_desktop_application: function() {
-        const IsSupported = Utils.isNwjs() & (Utils.isMobileDevice() === false) & nw !== undefined;
+        const IsSupported = Utils.isNwjs() &
+            (Utils.isMobileDevice() === false) & nw !== undefined;
         const result = (IsSupported === 1) ? true : false;
-        zr2cheat.is_desktop_application = () => {return result};
+        zr2cheat.is_desktop_application = () => {
+            return result
+        };
         return zr2cheat.is_desktop_application();
     },
 };
