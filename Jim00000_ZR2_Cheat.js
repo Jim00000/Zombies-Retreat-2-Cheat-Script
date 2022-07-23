@@ -583,26 +583,28 @@
     };
 })();
 
-// print all data items to the console.
-// It is good for adding new items
-function zr2cheat_print_all_items() {
-    const dataCount = $dataItems.length;
-    let id = 1;
-    for (id = 1; id < dataCount; id++) {
-        if ($dataItems[id].name !== '')
-            console.log(id + ':' + $dataItems[id].name);
-    }
-}
-
-// print all zombies's character name to the console.
-// It is good for checking new characters or zombies in new version
-function zr2cheat_print_all_zombies_name() {
-    $gameMap.events().forEach(event => {
-        if (event != null && event instanceof Game_Event) {
-            if (event._characterName !== '') {
-                const id = $gameMap.events().findIndex((obj) => obj === event);
-                console.log(`${id} : ${event._characterName}`)
-            }
+var zr2cheat = {
+    // print all data items to the console.
+    // It is good for adding new items
+    print_all_items: function() {
+        const dataCount = $dataItems.length;
+        let id = 1;
+        for (id = 1; id < dataCount; id++) {
+            if ($dataItems[id].name !== '')
+                console.log(id + ':' + $dataItems[id].name);
         }
-    });
-}
+    },
+    // print all zombies's character name to the console.
+    // It is good for checking new characters or zombies in new version
+    print_all_zombies_name: function() {
+        $gameMap.events().forEach(event => {
+            if (event != null && event instanceof Game_Event) {
+                if (event._characterName !== '') {
+                    const id =
+                        $gameMap.events().findIndex((obj) => obj === event);
+                    console.log(`${id} : ${event._characterName}`)
+                }
+            }
+        });
+    },
+};
