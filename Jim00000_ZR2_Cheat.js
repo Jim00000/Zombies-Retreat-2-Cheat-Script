@@ -33,35 +33,70 @@
     let last_frame_count = 0;
     let speed_multiplier = 1.0;
     let fadeEffectHandlerId = -1;
+    let is_cheat_panel_open = false;
     let is_zombie_freezed = false;
     let is_dark_scene_disabled = false;
+    let is_full_hp_enabled = false;
+    let is_full_item_enabled = false;
+    let enemy_count = 0;
     let original_color_tone = [];
     const supported_game_version = 'beta 0.8.1'
-    const speed_multiplier_virtualkey = 117        // F6
-    const freeze_zombie_movement_virtualkey = 118  // F7
-    const remove_all_enemies_virtualkey = 119      // F8
-    const toggle_dark_scene_virtualkey = 121       // F10
-    const speed_multiplier_keyname = 'change_speed_multiplier';
-    const freeze_zombie_movement_keyname = 'freeze_zomble_movement';
+    const toggle_cheat_panel_virtualkey = 118  // F7
+    const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
-    const toggle_dark_scene_keyname = 'toggle_dark_scene';
+    const toggle_cheat_panel_keyname = 'toggle_cheat_panel';
 
-    // register F6 key to change speed multiplier
-    Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
-    // register F7 key to freeze zombie's movement
-    Input.keyMapper[freeze_zombie_movement_virtualkey] =
-        freeze_zombie_movement_keyname;
-    Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
-    // register F10 key to toggle dark scene
-    Input.keyMapper[toggle_dark_scene_virtualkey] = toggle_dark_scene_keyname;
-
-    function __onSpeedMultiplierChange__() {
-        let final_speed_multiplier = speed_multiplier + 0.25;
-        if (final_speed_multiplier > 3.5) {
-            final_speed_multiplier = 1.0;
+    nw.Window.get().on('close', (win) => {
+        // close cheat pane window process if open
+        if (is_cheat_panel_open) {
+            process.emit('CloseCheatPane');
         }
-        speed_multiplier = final_speed_multiplier;
-        __updateSpeedChangeInfo__(speed_multiplier);
+        process.exit(0);  // terminate this process
+    });
+
+    process.addListener('OnCheatPaneProcessReadyTriggered', () => {
+        // synchronize cheat status with cheat panel
+        process.emit('SynchronizeCheatStatus', {
+            is_full_hp_enabled: is_full_hp_enabled,
+            is_full_item_enabled: is_full_item_enabled,
+            is_zombie_freezed: is_zombie_freezed,
+            is_dark_scene_disabled: is_dark_scene_disabled,
+            speed_multiplier: speed_multiplier,
+            enemy_count: enemy_count,
+        });
+    });
+
+    process.addListener('OnFullHPTriggered', (toggle) => {
+        is_full_hp_enabled = toggle;
+    });
+
+    process.addListener('OnFullItemsTriggered', (toggle) => {
+        is_full_item_enabled = toggle;
+    });
+
+    process.addListener('OnFreezeZombieTriggered', (toggle) => {
+        is_zombie_freezed = toggle;
+        __updateZombieMovementFreezedChangedInfo__();
+    });
+
+    process.addListener('OnDisableDarkSceneEffectTriggered', (toggle) => {
+        is_dark_scene_disabled = toggle;
+        __onToggleDarkSceneTriggered__();
+    });
+
+    process.addListener('KillAllZombies', () => {
+        __onRemoveAllEnemiesTriggered__();
+    });
+
+    process.addListener('ChangeGameSpeedMultiplier', (multiplier) => {
+        __onSpeedMultiplierChange__(multiplier);
+    });
+
+    function __onSpeedMultiplierChange__(multiplier) {
+        if (1.0 <= multiplier && multiplier <= 3.5) {
+            speed_multiplier = multiplier;
+            __updateSpeedChangeInfo__(speed_multiplier);
+        }
     };
 
     function __onZombieMovementFreezedTriggered__() {
@@ -104,7 +139,6 @@
     };
 
     function __onToggleDarkSceneTriggered__() {
-        is_dark_scene_disabled = !is_dark_scene_disabled;
         if (is_dark_scene_disabled === false) {
             // set current color tone only if original color tone exists
             if (original_color_tone.length > 0) {
@@ -115,6 +149,39 @@
             __enableTerraxLightingEffect__();
         }
         __updateDisableDarkSceneInfo__();
+    };
+
+    function __onToggleCheatPanelTriggered__() {
+        if (nw !== undefined && is_cheat_panel_open === false) {
+            nw.Window.open(
+                'www/js/plugins/zr2cheat/cheat_panel/index.html', {}, (win) => {
+                    // onClosed event
+                    win.on('closed', function() {
+                        win = null;
+                        is_cheat_panel_open = false;
+                    });
+                });
+            is_cheat_panel_open = true;
+        }
+    };
+
+    function __calculateEnemyCount__() {
+        let enemy_count = 0;
+        $gameMap.events().forEach(event => {
+            if (event != null && event instanceof Game_Event &&
+                __isEnemyCharacterEvent__(event)) {
+                enemy_count += 1;
+            }
+        });
+        return enemy_count;
+    };
+
+    function __updateEnemyCountOnCheatPanel__() {
+        const current_enemy_count = __calculateEnemyCount__();
+        if (current_enemy_count !== enemy_count) {
+            enemy_count = current_enemy_count;
+            process.emit('UpdateEnemyCountBadge', enemy_count);
+        }
     };
 
     function __isEnemyCharacterEvent__(event) {
@@ -132,32 +199,20 @@
     };
 
     function __monitorCustomInputSetup__() {
-        Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
-        Input.keyMapper[freeze_zombie_movement_virtualkey] =
-            freeze_zombie_movement_keyname;
         Input.keyMapper[remove_all_enemies_virtualkey] =
             remove_all_enemies_keyname;
-        Input.keyMapper[toggle_dark_scene_virtualkey] =
-            toggle_dark_scene_keyname;
+        Input.keyMapper[toggle_cheat_panel_virtualkey] =
+            toggle_cheat_panel_keyname;
     };
 
     function __monitorCustomInput__() {
         if (!SceneManager.isSceneChanging()) {
-            if (Input.isTriggered(speed_multiplier_keyname)) {
-                __onSpeedMultiplierChange__();
-                return true;
-            }
-            if (Input.isTriggered(freeze_zombie_movement_keyname)) {
-                is_zombie_freezed = !is_zombie_freezed;
-                __updateZombieMovementFreezedChangedInfo__();
-                return true;
-            }
             if (Input.isTriggered(remove_all_enemies_keyname)) {
                 __onRemoveAllEnemiesTriggered__();
                 return true;
             }
-            if (Input.isTriggered(toggle_dark_scene_keyname)) {
-                __onToggleDarkSceneTriggered__();
+            if (Input.isTriggered(toggle_cheat_panel_keyname)) {
+                __onToggleCheatPanelTriggered__();
                 return true;
             }
         }
@@ -168,13 +223,20 @@
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - last_frame_count > 30) {
             __setMaxMoney__();
-            __setFullHP__();
-            __setFullItems__();
+            if (is_full_hp_enabled) {
+                __setFullHP__();
+            }
+            if (is_full_item_enabled) {
+                __setFullItems__();
+            }
             if (is_dark_scene_disabled) {
                 __disableDarkScene__();
             }
             if (is_zombie_freezed) {
                 __onZombieMovementFreezedTriggered__();
+            }
+            if (is_cheat_panel_open) {
+                __updateEnemyCountOnCheatPanel__();
             }
             // Tell the player hint if possible
             __handlePuzzleHint__();
