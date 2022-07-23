@@ -583,7 +583,7 @@
     };
 })();
 
-var zr2cheat = {
+const zr2cheat = {
     // print all data items to the console.
     // It is good for adding new items
     print_all_items: function() {
