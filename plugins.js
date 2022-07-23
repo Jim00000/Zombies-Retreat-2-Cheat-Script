@@ -37,4 +37,4 @@ var $plugins =
 ];
 
 // Append the cheat script
-$plugins.push({"name":"Jim00000_ZR2_Cheat","status":true,"description":"","parameters":{}});
+$plugins.push({"name":"zr2cheat/Jim00000_ZR2_Cheat","status":true,"description":"","parameters":{}});
