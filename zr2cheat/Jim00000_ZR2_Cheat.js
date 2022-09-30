@@ -258,124 +258,69 @@
     };
 
     function __setFullItems__() {
-        // Scrap Metal x99
-        $gameParty._items[1] = 99;
-        // Scrap Wood x99
-        $gameParty._items[2] = 99;
-        // Scrap Brick x99
-        $gameParty._items[3] = 99;
-        // Electric Fuse x99
-        $gameParty._items[4] = 99;
-        // Medicinal Herb x99
-        $gameParty._items[5] = 99;
-        // Water x99
-        $gameParty._items[6] = 99;
-        // Food (Grain) x99
-        $gameParty._items[7] = 99;
-        // Food (Fish) x99
-        $gameParty._items[8] = 99;
-        // Food (Junk) x99
-        $gameParty._items[9] = 99;
-        // Red Wine x99
-        $gameParty._items[10] = 99;
-        // Premium Vodka x99
-        $gameParty._items[11] = 99;
-        // Med kit x99
-        $gameParty._items[12] = 99;
-        // Food (Fresh) x99
-        $gameParty._items[13] = 99;
-        // Golden Key x99
-        $gameParty._items[14] = 99;
-        // Crafting Manual (Beginner) x99
-        // $gameParty._items[15] = 99;
-        // Crafting Manual (Intermediate) x99
-        // $gameParty._items[16] = 99;
-        // Crafting Manual (Advanced) x99
-        // $gameParty._items[17] = 99;
-        // Bartender's Basics x99
-        // $gameParty._items[18] = 99;
-        // Pistol x99
-        // $gameParty._items[19] = 99;
-        // Ammunition(Revolver) x99
-        $gameParty._items[20] = 99;
-        // Ammunition x4 (Rev.) x99
-        $gameParty._items[21] = 99;
-        // Shotgun x99
-        // $gameParty._items[22] = 99;
-        // Ammunition (Shotgun) x99
-        $gameParty._items[23] = 99;
-        // Ammunition X6 (Shot.) x99
-        $gameParty._items[24] = 99;
-        // 3rd Weapon Placeholder x99
-        // $gameParty._items[25] = 99;
-        // String x99
-        $gameParty._items[29] = 99;
-        // Fishing rod x99
-        $gameParty._items[30] = 99;
-        // Wood Cutting Axe x99
-        $gameParty._items[31] = 99;
-        // Metal-Cutting Saw x99
-        $gameParty._items[32] = 99;
-        // Hookshot x99
-        // $gameParty._items[33] = 99;
-        // Z-Cola x99
-        $gameParty._items[34] = 99;
-        // Erotic Soap x99
-        // $gameParty._items[35] = 99;
-        // Police Station Key x99
-        // $gameParty._items[42] = 99;
-        // Nostalgic Flower x99
-        // $gameParty._items[43] = 99;
-        // Hydro Plant Key x99
-        // $gameParty._items[44] = 99;
-        // Storage Crane Card A x99
-        // $gameParty._items[45] = 99;
-        // Fiona's Shop Schematic x99
-        // $gameParty._items[50] = 99;
-        // Garden Schematic x99
-        // $gameParty._items[51] = 99;
-        // Communications Kit x99
-        // $gameParty._items[52] = 99;
-        // Subway Blue Card x99
-        // $gameParty._items[53] = 99;
-        // Helios Module B
-        // $gameParty._items[55] = 99;
-        // Bathroom Seat Instructions
-        // $gameParty._items[58] = 99;
-        // Water Filter Schematic
-        // $gameParty._items[59] = 99;
-        // Stacy's Diner Schematic
-        // $gameParty._items[60] = 99;
-        // Strawberry Milkshake
-        $gameParty._items[66] = 99;
-        // Chocolate Milkshake
-        $gameParty._items[67] = 99;
-        // Blueberry Milkshake
-        $gameParty._items[68] = 99;
-        // Rootbeer Float
-        $gameParty._items[69] = 99;
-        // Strawberries [Stacy]
-        $gameParty._items[70] = 99;
-        // Blueberries [Stacy]
-        $gameParty._items[71] = 99;
-        // Chocolate [Stacy]
-        $gameParty._items[72] = 99;
-        // Milk [Stacy]
-        $gameParty._items[73] = 99;
-        // Digital Camera
-        // $gameParty._items[79] = 99;
-        // Silk Bra
-        // $gameParty._items[80] = 99;
-        // Scrap Wood (x3)
-        $gameParty._items[82] = 99;
-        // Scrap Metal (x3)
-        $gameParty._items[83] = 99;
-        // Scrap Brick (x3)
-        $gameParty._items[84] = 99;
-        // Water (x3)
-        $gameParty._items[85] = 99;
-        // Food (Grain) (x3)
-        $gameParty._items[86] = 99;
+        $gameParty._items[1] = 99;   // Scrap Metal
+        $gameParty._items[2] = 99;   // Scrap Wood
+        $gameParty._items[3] = 99;   // Scrap Brick
+        $gameParty._items[4] = 99;   // Electric Fuse
+        $gameParty._items[5] = 99;   // Medicinal Herb
+        $gameParty._items[6] = 99;   // Water
+        $gameParty._items[7] = 99;   // Food (Grain)
+        $gameParty._items[8] = 99;   // Food (Fish)
+        $gameParty._items[9] = 99;   // Food (Junk)
+        $gameParty._items[10] = 99;  // Red Wine
+        $gameParty._items[11] = 99;  // Premium Vodka
+        $gameParty._items[12] = 99;  // Med kit
+        $gameParty._items[13] = 99;  // Food (Fresh)
+        $gameParty._items[14] = 99;  // Golden Key
+        // $gameParty._items[15] =;  // Crafting Manual (Beginner)
+        // $gameParty._items[16] =;  // Crafting Manual (Intermediate)
+        // $gameParty._items[17] =;  // Crafting Manual (Advanced)
+        // $gameParty._items[18] =;  // Bartender's Basics
+        // $gameParty._items[19] =;  // Pistol
+        $gameParty._items[20] = 99;  // Ammunition(Revolver)
+        $gameParty._items[21] = 99;  // Ammunition x4 (Rev.)
+        // $gameParty._items[22] =;  // Shotgun
+        $gameParty._items[23] = 99;  // Ammunition (Shotgun)
+        $gameParty._items[24] = 99;  // Ammunition X6 (Shot.)
+        // $gameParty._items[25] =;  // 3rd Weapon Placeholder
+        // $gameParty._items[28] =;  // Lead Pipe
+        $gameParty._items[29] = 99;  // String
+        $gameParty._items[30] = 99;  // Fishing rod
+        $gameParty._items[31] = 99;  // Wood Cutting Axe
+        $gameParty._items[32] = 99;  // Metal-Cutting Saw
+        // $gameParty._items[33] =;  // Hookshot
+        $gameParty._items[34] = 99;  // Z-Cola
+        // $gameParty._items[35] =;  // Erotic Soap
+        // $gameParty._items[36] =;  // Misty's Endorsement
+        // $gameParty._items[42] =;  // Police Station Key
+        // $gameParty._items[43] =;  // Nostalgic Flower
+        // $gameParty._items[44] =;  // Hydro Plant Key
+        // $gameParty._items[45] =;  // Storage Crane Card A
+        // $gameParty._items[50] =;  // Fiona's Shop Schematic
+        // $gameParty._items[51] =;  // Garden Schematic
+        // $gameParty._items[52] =;  // Communications Kit
+        // $gameParty._items[53] =;  // Subway Blue Card
+        // $gameParty._items[55] =;  // Helios Module B
+        // $gameParty._items[58] =;  // Bathroom Seat Instructions
+        // $gameParty._items[59] =;  // Water Filter Schematic
+        // $gameParty._items[60] =;  // Stacy's Diner Schematic
+        $gameParty._items[66] = 99;  // Strawberry Milkshake
+        $gameParty._items[67] = 99;  // Chocolate Milkshake
+        $gameParty._items[68] = 99;  // Blueberry Milkshake
+        $gameParty._items[69] = 99;  // Rootbeer Float
+        $gameParty._items[70] = 99;  // Strawberries [Stacy]
+        $gameParty._items[71] = 99;  // Blueberries [Stacy]
+        $gameParty._items[72] = 99;  // Chocolate [Stacy]
+        $gameParty._items[73] = 99;  // Milk [Stacy]
+        // $gameParty._items[75] =;  // Flare Gun [Lucy]
+        // $gameParty._items[79] =;  // Digital Camera
+        // $gameParty._items[80] =;  // Silk Bra
+        $gameParty._items[82] = 99;  // Scrap Wood (x3)
+        $gameParty._items[83] = 99;  // Scrap Metal (x3)
+        $gameParty._items[84] = 99;  // Scrap Brick (x3)
+        $gameParty._items[85] = 99;  // Water (x3)
+        $gameParty._items[86] = 99;  // Food (Grain) (x3)
+        $gameParty._items[87] = 99;  // Electric Fuse (x3)
     };
 
     function __disableDarkScene__() {
