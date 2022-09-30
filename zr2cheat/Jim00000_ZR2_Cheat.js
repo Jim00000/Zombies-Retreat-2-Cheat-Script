@@ -24,8 +24,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.8.1
-// ▶ Update         : 07.09.2022
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.9.2
+// ▶ Update         : 10.01.2022
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -33,35 +33,71 @@
     let last_frame_count = 0;
     let speed_multiplier = 1.0;
     let fadeEffectHandlerId = -1;
+    let is_cheat_panel_open = false;
     let is_zombie_freezed = false;
     let is_dark_scene_disabled = false;
+    let is_full_hp_enabled = false;
+    let is_full_item_enabled = false;
+    let enemy_count = 0;
     let original_color_tone = [];
-    const supported_game_version = 'beta 0.8.1'
-    const speed_multiplier_virtualkey = 117        // F6
-    const freeze_zombie_movement_virtualkey = 118  // F7
-    const remove_all_enemies_virtualkey = 119      // F8
-    const toggle_dark_scene_virtualkey = 121       // F10
-    const speed_multiplier_keyname = 'change_speed_multiplier';
-    const freeze_zombie_movement_keyname = 'freeze_zomble_movement';
+    const supported_game_version = 'beta 0.9.2'
+    const toggle_cheat_panel_virtualkey = 118  // F7
+    const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
-    const toggle_dark_scene_keyname = 'toggle_dark_scene';
+    const toggle_cheat_panel_keyname = 'toggle_cheat_panel';
+    const original_zr2_title = document.title;
 
-    // register F6 key to change speed multiplier
-    Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
-    // register F7 key to freeze zombie's movement
-    Input.keyMapper[freeze_zombie_movement_virtualkey] =
-        freeze_zombie_movement_keyname;
-    Input.keyMapper[remove_all_enemies_virtualkey] = remove_all_enemies_keyname;
-    // register F10 key to toggle dark scene
-    Input.keyMapper[toggle_dark_scene_virtualkey] = toggle_dark_scene_keyname;
-
-    function __onSpeedMultiplierChange__() {
-        let final_speed_multiplier = speed_multiplier + 0.25;
-        if (final_speed_multiplier > 3.5) {
-            final_speed_multiplier = 1.0;
+    nw.Window.get().on('close', (win) => {
+        // close cheat pane window process if open
+        if (is_cheat_panel_open) {
+            process.emit('CloseCheatPane');
         }
-        speed_multiplier = final_speed_multiplier;
-        __updateSpeedChangeInfo__(speed_multiplier);
+        process.exit(0);  // terminate this process
+    });
+
+    process.addListener('OnCheatPaneProcessReadyTriggered', () => {
+        // synchronize cheat status with cheat panel
+        process.emit('SynchronizeCheatStatus', {
+            is_full_hp_enabled: is_full_hp_enabled,
+            is_full_item_enabled: is_full_item_enabled,
+            is_zombie_freezed: is_zombie_freezed,
+            is_dark_scene_disabled: is_dark_scene_disabled,
+            speed_multiplier: speed_multiplier,
+            enemy_count: enemy_count,
+        });
+    });
+
+    process.addListener('OnFullHPTriggered', (toggle) => {
+        is_full_hp_enabled = toggle;
+    });
+
+    process.addListener('OnFullItemsTriggered', (toggle) => {
+        is_full_item_enabled = toggle;
+    });
+
+    process.addListener('OnFreezeZombieTriggered', (toggle) => {
+        is_zombie_freezed = toggle;
+        __updateZombieMovementFreezedChangedInfo__();
+    });
+
+    process.addListener('OnDisableDarkSceneEffectTriggered', (toggle) => {
+        is_dark_scene_disabled = toggle;
+        __onToggleDarkSceneTriggered__();
+    });
+
+    process.addListener('KillAllZombies', () => {
+        __onRemoveAllEnemiesTriggered__();
+    });
+
+    process.addListener('ChangeGameSpeedMultiplier', (multiplier) => {
+        __onSpeedMultiplierChange__(multiplier);
+    });
+
+    function __onSpeedMultiplierChange__(multiplier) {
+        if (1.0 <= multiplier && multiplier <= 3.5) {
+            speed_multiplier = multiplier;
+            __updateSpeedChangeInfo__(speed_multiplier);
+        }
     };
 
     function __onZombieMovementFreezedTriggered__() {
@@ -104,7 +140,6 @@
     };
 
     function __onToggleDarkSceneTriggered__() {
-        is_dark_scene_disabled = !is_dark_scene_disabled;
         if (is_dark_scene_disabled === false) {
             // set current color tone only if original color tone exists
             if (original_color_tone.length > 0) {
@@ -115,6 +150,39 @@
             __enableTerraxLightingEffect__();
         }
         __updateDisableDarkSceneInfo__();
+    };
+
+    function __onToggleCheatPanelTriggered__() {
+        if (nw !== undefined && is_cheat_panel_open === false) {
+            nw.Window.open(
+                'www/js/plugins/zr2cheat/cheat_panel/index.html', {}, (win) => {
+                    // onClosed event
+                    win.on('closed', function() {
+                        win = null;
+                        is_cheat_panel_open = false;
+                    });
+                });
+            is_cheat_panel_open = true;
+        }
+    };
+
+    function __calculateEnemyCount__() {
+        let enemy_count = 0;
+        $gameMap.events().forEach(event => {
+            if (event != null && event instanceof Game_Event &&
+                __isEnemyCharacterEvent__(event)) {
+                enemy_count += 1;
+            }
+        });
+        return enemy_count;
+    };
+
+    function __updateEnemyCountOnCheatPanel__() {
+        const current_enemy_count = __calculateEnemyCount__();
+        if (current_enemy_count !== enemy_count) {
+            enemy_count = current_enemy_count;
+            process.emit('UpdateEnemyCountBadge', enemy_count);
+        }
     };
 
     function __isEnemyCharacterEvent__(event) {
@@ -132,32 +200,20 @@
     };
 
     function __monitorCustomInputSetup__() {
-        Input.keyMapper[speed_multiplier_virtualkey] = speed_multiplier_keyname;
-        Input.keyMapper[freeze_zombie_movement_virtualkey] =
-            freeze_zombie_movement_keyname;
         Input.keyMapper[remove_all_enemies_virtualkey] =
             remove_all_enemies_keyname;
-        Input.keyMapper[toggle_dark_scene_virtualkey] =
-            toggle_dark_scene_keyname;
+        Input.keyMapper[toggle_cheat_panel_virtualkey] =
+            toggle_cheat_panel_keyname;
     };
 
     function __monitorCustomInput__() {
         if (!SceneManager.isSceneChanging()) {
-            if (Input.isTriggered(speed_multiplier_keyname)) {
-                __onSpeedMultiplierChange__();
-                return true;
-            }
-            if (Input.isTriggered(freeze_zombie_movement_keyname)) {
-                is_zombie_freezed = !is_zombie_freezed;
-                __updateZombieMovementFreezedChangedInfo__();
-                return true;
-            }
             if (Input.isTriggered(remove_all_enemies_keyname)) {
                 __onRemoveAllEnemiesTriggered__();
                 return true;
             }
-            if (Input.isTriggered(toggle_dark_scene_keyname)) {
-                __onToggleDarkSceneTriggered__();
+            if (Input.isTriggered(toggle_cheat_panel_keyname)) {
+                __onToggleCheatPanelTriggered__();
                 return true;
             }
         }
@@ -168,13 +224,20 @@
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - last_frame_count > 30) {
             __setMaxMoney__();
-            __setFullHP__();
-            __setFullItems__();
+            if (is_full_hp_enabled) {
+                __setFullHP__();
+            }
+            if (is_full_item_enabled) {
+                __setFullItems__();
+            }
             if (is_dark_scene_disabled) {
                 __disableDarkScene__();
             }
             if (is_zombie_freezed) {
                 __onZombieMovementFreezedTriggered__();
+            }
+            if (is_cheat_panel_open) {
+                __updateEnemyCountOnCheatPanel__();
             }
             // Tell the player hint if possible
             __handlePuzzleHint__();
@@ -196,124 +259,69 @@
     };
 
     function __setFullItems__() {
-        // Scrap Metal x99
-        $gameParty._items[1] = 99;
-        // Scrap Wood x99
-        $gameParty._items[2] = 99;
-        // Scrap Brick x99
-        $gameParty._items[3] = 99;
-        // Electric Fuse x99
-        $gameParty._items[4] = 99;
-        // Medicinal Herb x99
-        $gameParty._items[5] = 99;
-        // Water x99
-        $gameParty._items[6] = 99;
-        // Food (Grain) x99
-        $gameParty._items[7] = 99;
-        // Food (Fish) x99
-        $gameParty._items[8] = 99;
-        // Food (Junk) x99
-        $gameParty._items[9] = 99;
-        // Red Wine x99
-        $gameParty._items[10] = 99;
-        // Premium Vodka x99
-        $gameParty._items[11] = 99;
-        // Med kit x99
-        $gameParty._items[12] = 99;
-        // Food (Fresh) x99
-        $gameParty._items[13] = 99;
-        // Golden Key x99
-        $gameParty._items[14] = 99;
-        // Crafting Manual (Beginner) x99
-        // $gameParty._items[15] = 99;
-        // Crafting Manual (Intermediate) x99
-        // $gameParty._items[16] = 99;
-        // Crafting Manual (Advanced) x99
-        // $gameParty._items[17] = 99;
-        // Bartender's Basics x99
-        // $gameParty._items[18] = 99;
-        // Pistol x99
-        // $gameParty._items[19] = 99;
-        // Ammunition(Revolver) x99
-        $gameParty._items[20] = 99;
-        // Ammunition x4 (Rev.) x99
-        $gameParty._items[21] = 99;
-        // Shotgun x99
-        // $gameParty._items[22] = 99;
-        // Ammunition (Shotgun) x99
-        $gameParty._items[23] = 99;
-        // Ammunition X6 (Shot.) x99
-        $gameParty._items[24] = 99;
-        // 3rd Weapon Placeholder x99
-        // $gameParty._items[25] = 99;
-        // String x99
-        $gameParty._items[29] = 99;
-        // Fishing rod x99
-        $gameParty._items[30] = 99;
-        // Wood Cutting Axe x99
-        $gameParty._items[31] = 99;
-        // Metal-Cutting Saw x99
-        $gameParty._items[32] = 99;
-        // Hookshot x99
-        // $gameParty._items[33] = 99;
-        // Z-Cola x99
-        $gameParty._items[34] = 99;
-        // Erotic Soap x99
-        // $gameParty._items[35] = 99;
-        // Police Station Key x99
-        // $gameParty._items[42] = 99;
-        // Nostalgic Flower x99
-        // $gameParty._items[43] = 99;
-        // Hydro Plant Key x99
-        // $gameParty._items[44] = 99;
-        // Storage Crane Card A x99
-        // $gameParty._items[45] = 99;
-        // Fiona's Shop Schematic x99
-        // $gameParty._items[50] = 99;
-        // Garden Schematic x99
-        // $gameParty._items[51] = 99;
-        // Communications Kit x99
-        // $gameParty._items[52] = 99;
-        // Subway Blue Card x99
-        // $gameParty._items[53] = 99;
-        // Helios Module B
-        // $gameParty._items[55] = 99;
-        // Bathroom Seat Instructions
-        // $gameParty._items[58] = 99;
-        // Water Filter Schematic
-        // $gameParty._items[59] = 99;
-        // Stacy's Diner Schematic
-        // $gameParty._items[60] = 99;
-        // Strawberry Milkshake
-        $gameParty._items[66] = 99;
-        // Chocolate Milkshake
-        $gameParty._items[67] = 99;
-        // Blueberry Milkshake
-        $gameParty._items[68] = 99;
-        // Rootbeer Float
-        $gameParty._items[69] = 99;
-        // Strawberries [Stacy]
-        $gameParty._items[70] = 99;
-        // Blueberries [Stacy]
-        $gameParty._items[71] = 99;
-        // Chocolate [Stacy]
-        $gameParty._items[72] = 99;
-        // Milk [Stacy]
-        $gameParty._items[73] = 99;
-        // Digital Camera
-        // $gameParty._items[79] = 99;
-        // Silk Bra
-        // $gameParty._items[80] = 99;
-        // Scrap Wood (x3)
-        $gameParty._items[82] = 99;
-        // Scrap Metal (x3)
-        $gameParty._items[83] = 99;
-        // Scrap Brick (x3)
-        $gameParty._items[84] = 99;
-        // Water (x3)
-        $gameParty._items[85] = 99;
-        // Food (Grain) (x3)
-        $gameParty._items[86] = 99;
+        $gameParty._items[1] = 99;   // Scrap Metal
+        $gameParty._items[2] = 99;   // Scrap Wood
+        $gameParty._items[3] = 99;   // Scrap Brick
+        $gameParty._items[4] = 99;   // Electric Fuse
+        $gameParty._items[5] = 99;   // Medicinal Herb
+        $gameParty._items[6] = 99;   // Water
+        $gameParty._items[7] = 99;   // Food (Grain)
+        $gameParty._items[8] = 99;   // Food (Fish)
+        $gameParty._items[9] = 99;   // Food (Junk)
+        $gameParty._items[10] = 99;  // Red Wine
+        $gameParty._items[11] = 99;  // Premium Vodka
+        $gameParty._items[12] = 99;  // Med kit
+        $gameParty._items[13] = 99;  // Food (Fresh)
+        $gameParty._items[14] = 99;  // Golden Key
+        // $gameParty._items[15] =;  // Crafting Manual (Beginner)
+        // $gameParty._items[16] =;  // Crafting Manual (Intermediate)
+        // $gameParty._items[17] =;  // Crafting Manual (Advanced)
+        // $gameParty._items[18] =;  // Bartender's Basics
+        // $gameParty._items[19] =;  // Pistol
+        $gameParty._items[20] = 99;  // Ammunition(Revolver)
+        $gameParty._items[21] = 99;  // Ammunition x4 (Rev.)
+        // $gameParty._items[22] =;  // Shotgun
+        $gameParty._items[23] = 99;  // Ammunition (Shotgun)
+        $gameParty._items[24] = 99;  // Ammunition X6 (Shot.)
+        // $gameParty._items[25] =;  // 3rd Weapon Placeholder
+        // $gameParty._items[28] =;  // Lead Pipe
+        $gameParty._items[29] = 99;  // String
+        $gameParty._items[30] = 99;  // Fishing rod
+        $gameParty._items[31] = 99;  // Wood Cutting Axe
+        $gameParty._items[32] = 99;  // Metal-Cutting Saw
+        // $gameParty._items[33] =;  // Hookshot
+        $gameParty._items[34] = 99;  // Z-Cola
+        // $gameParty._items[35] =;  // Erotic Soap
+        // $gameParty._items[36] =;  // Misty's Endorsement
+        // $gameParty._items[42] =;  // Police Station Key
+        // $gameParty._items[43] =;  // Nostalgic Flower
+        // $gameParty._items[44] =;  // Hydro Plant Key
+        // $gameParty._items[45] =;  // Storage Crane Card A
+        // $gameParty._items[50] =;  // Fiona's Shop Schematic
+        // $gameParty._items[51] =;  // Garden Schematic
+        // $gameParty._items[52] =;  // Communications Kit
+        // $gameParty._items[53] =;  // Subway Blue Card
+        // $gameParty._items[55] =;  // Helios Module B
+        // $gameParty._items[58] =;  // Bathroom Seat Instructions
+        // $gameParty._items[59] =;  // Water Filter Schematic
+        // $gameParty._items[60] =;  // Stacy's Diner Schematic
+        $gameParty._items[66] = 99;  // Strawberry Milkshake
+        $gameParty._items[67] = 99;  // Chocolate Milkshake
+        $gameParty._items[68] = 99;  // Blueberry Milkshake
+        $gameParty._items[69] = 99;  // Rootbeer Float
+        $gameParty._items[70] = 99;  // Strawberries [Stacy]
+        $gameParty._items[71] = 99;  // Blueberries [Stacy]
+        $gameParty._items[72] = 99;  // Chocolate [Stacy]
+        $gameParty._items[73] = 99;  // Milk [Stacy]
+        // $gameParty._items[75] =;  // Flare Gun [Lucy]
+        // $gameParty._items[79] =;  // Digital Camera
+        // $gameParty._items[80] =;  // Silk Bra
+        $gameParty._items[82] = 99;  // Scrap Wood (x3)
+        $gameParty._items[83] = 99;  // Scrap Metal (x3)
+        $gameParty._items[84] = 99;  // Scrap Brick (x3)
+        $gameParty._items[85] = 99;  // Water (x3)
+        $gameParty._items[86] = 99;  // Food (Grain) (x3)
+        $gameParty._items[87] = 99;  // Electric Fuse (x3)
     };
 
     function __disableDarkScene__() {
@@ -547,6 +555,9 @@
         Hook__Scene_Title__create.call(this, arguments);
         this.cheatScriptInfo = __buildCheatScriptInfo__();
         this.addChild(this.cheatScriptInfo);
+        // Update the title
+        document.title =
+            original_zr2_title + ' (Hint: Use F7 to open cheat panel)';
     };
 
     // Hook Window_Message::updateInput method
@@ -583,26 +594,39 @@
     };
 })();
 
-// print all data items to the console.
-// It is good for adding new items
-function zr2cheat_print_all_items() {
-    const dataCount = $dataItems.length;
-    let id = 1;
-    for (id = 1; id < dataCount; id++) {
-        if ($dataItems[id].name !== '')
-            console.log(id + ':' + $dataItems[id].name);
-    }
-}
-
-// print all zombies's character name to the console.
-// It is good for checking new characters or zombies in new version
-function zr2cheat_print_all_zombies_name() {
-    $gameMap.events().forEach(event => {
-        if (event != null && event instanceof Game_Event) {
-            if (event._characterName !== '') {
-                const id = $gameMap.events().findIndex((obj) => obj === event);
-                console.log(`${id} : ${event._characterName}`)
-            }
+const zr2cheat = {
+    // print all data items to the console.
+    // It is good for adding new items
+    print_all_items: function() {
+        const dataCount = $dataItems.length;
+        let id = 1;
+        for (id = 1; id < dataCount; id++) {
+            if ($dataItems[id].name !== '')
+                console.log(id + ':' + $dataItems[id].name);
         }
-    });
-}
+    },
+    // print all zombies's character name to the console.
+    // It is good for checking new characters or zombies in new version
+    print_all_zombies_name: function() {
+        $gameMap.events().forEach(event => {
+            if (event != null && event instanceof Game_Event) {
+                if (event._characterName !== '') {
+                    const id =
+                        $gameMap.events().findIndex((obj) => obj === event);
+                    console.log(`${id} : ${event._characterName}`)
+                }
+            }
+        });
+    },
+    // check the environment is desktop.
+    // This cheat doesn't support mobile device.
+    is_desktop_application: function() {
+        const IsSupported = Utils.isNwjs() &
+            (Utils.isMobileDevice() === false) & nw !== undefined;
+        const result = (IsSupported === 1) ? true : false;
+        zr2cheat.is_desktop_application = () => {
+            return result
+        };
+        return zr2cheat.is_desktop_application();
+    },
+};
