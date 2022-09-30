@@ -45,6 +45,7 @@
     const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
     const toggle_cheat_panel_keyname = 'toggle_cheat_panel';
+    const original_zr2_title = document.title;
 
     nw.Window.get().on('close', (win) => {
         // close cheat pane window process if open
@@ -554,6 +555,9 @@
         Hook__Scene_Title__create.call(this, arguments);
         this.cheatScriptInfo = __buildCheatScriptInfo__();
         this.addChild(this.cheatScriptInfo);
+        // Update the title
+        document.title =
+            original_zr2_title + ' (Hint: Use F7 to open cheat panel)';
     };
 
     // Hook Window_Message::updateInput method
