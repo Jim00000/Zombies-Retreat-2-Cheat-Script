@@ -27,19 +27,17 @@ This repository aims to provide a simple solution cheating in the game Zombie's 
 
 ## Install
 
-Find matched game version in [release page](https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases), download the source code, replace www/js/plugins.js by my plugins.js and put Jim00000_ZR2_Cheat.js under www/js/plugins/ directory.
+Find matched game version in [release page](https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases), download the source code, replace www/js/plugins.js by my plugins.js and put 'zr2cheat' folder under www/js/plugins/ directory.
 
-You should find "cheat is activated." message in title scene as following:
+You should find "cheat is activated." message at the bottom of title scene as following:
 
-![url of image is broken](https://i.imgur.com/EoFEECi.png)
+![url of image is broken](https://i.imgur.com/UChEuZk.png)
 
 ## User guide
 
-- `No damage` and `Full Items` are activated automatically. There are not keys to trigger such cheats.
-- F6 to change game speedup multiplier (Loop : x1 → x1.25 → x1.5 → ... → x3.25 → x3.5 → x1).
-- F7 to toggle freezing zombies.
-- F8 to kill all zombies on the current map. Be very careful to use this cheat, some events might be stuck in some situations.
-- F10 to disable dark scene effect.
+Use F7 to open cheat panel.
+
+![url of image is broken](https://i.imgur.com/oVD4Ezs.png)
 
 ## License
 
