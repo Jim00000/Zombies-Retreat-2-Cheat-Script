@@ -188,9 +188,19 @@
     function __isEnemyCharacterEvent__(event) {
         const name = event.characterName();
         const enemy_name_list = [
-            'Male_Zombies', 'Male_Zombies_Gore', 'PHC_Em-Serv-ZomA2',
-            'PHC_Em-Serv-ZomGoreB2', 'PHC_Em-Serv-ZomB2',
-            'PHC_Em-Serv-ZomGoreA2', 'Zombies_Med1', 'Zombies_Med2'
+            'HC_Zombies2A',           //
+            'HC_Zombies2B',           //
+            'HC_Zombies2C',           //
+            'HC_Zombies2D',           //
+            'HC_Zombies3C',           //
+            'Male_Zombies',           //
+            'Male_Zombies_Gore',      //
+            'PHC_Em-Serv-ZomA2',      //
+            'PHC_Em-Serv-ZomB2',      //
+            'PHC_Em-Serv-ZomGoreA2',  //
+            'PHC_Em-Serv-ZomGoreB2',  //
+            'Zombies_Med1',           //
+            'Zombies_Med2'            //
         ];
         let isEnemy = false;
         enemy_name_list.forEach(candicate => {
