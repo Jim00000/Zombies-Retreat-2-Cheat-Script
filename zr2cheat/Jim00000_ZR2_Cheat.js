@@ -440,7 +440,7 @@
         text._text = `Cheat is activated. Support Game Version: ${
             supported_game_version}`;
         text.style.fill = 0x000000;  // white color
-        text.x = 420;
+        text.x = 400;
         text.y = Graphics.boxHeight - 15 - text.style.fontSize;
         text.alpha = 1.0;
         text.updateText();
