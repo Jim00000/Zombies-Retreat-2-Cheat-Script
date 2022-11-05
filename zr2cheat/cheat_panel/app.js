@@ -74,4 +74,14 @@ process.addListener('CloseCheatPane', () => {
     nw.Window.get().close();
 });
 
+process.addListener('ResetCheat', () => {
+    document.getElementById('switch_fullhp').checked = false;
+    document.getElementById('switch_fullitems').checked = false;
+    document.getElementById('switch_freeze_zombie').checked = false;
+    document.getElementById('switch_disable_dark_scene').checked = false;
+    document.getElementById('range_speedup').value = 1.0;
+    document.getElementById('badge_enemy_count').textContent = 0;
+    updateSpeedupMultiplier(1.0);
+});
+
 process.emit('OnCheatPaneProcessReadyTriggered');

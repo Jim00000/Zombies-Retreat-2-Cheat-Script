@@ -55,6 +55,8 @@
         process.exit(0);  // terminate this process
     });
 
+    process.emit('ResetCheat');
+
     process.addListener('OnCheatPaneProcessReadyTriggered', () => {
         // synchronize cheat status with cheat panel
         process.emit('SynchronizeCheatStatus', {
@@ -416,7 +418,7 @@
 
     function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
-        //$gameTemp._isPlaytest = true;
+        $gameTemp._isPlaytest = true;
 
         // Cheating
         __handleCheat__();
