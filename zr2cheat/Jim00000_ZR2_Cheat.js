@@ -316,6 +316,15 @@
         $gameParty._items[85] = 99;  // Water (x3)
         $gameParty._items[86] = 99;  // Food (Grain) (x3)
         $gameParty._items[87] = 99;  // Electric Fuse (x3)
+        // $gameParty._items[95] =;  // Halloween Candy
+        // $gameParty._items[96] =;  // Vending Machine Token
+        // $gameParty._items[97] =;  // Tasty Juice
+        // $gameParty._items[98] =;  // Brittle Shovel
+        // $gameParty._items[99] =;  // Strange Orb
+        // $gameParty._items[100] =; // Cursed Orb
+        // $gameParty._items[101] =; // Purified Orb
+        // $gameParty._items[102] =; // Pumpkin
+        // $gameParty._items[103] =; // Jack-O-Lantern
     };
 
     function __disableDarkScene__() {
