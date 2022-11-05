@@ -85,3 +85,5 @@ process.addListener('ResetCheat', () => {
 });
 
 process.emit('OnCheatPaneProcessReadyTriggered');
+
+window.resizeTo(500, 470);
