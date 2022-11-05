@@ -31,13 +31,13 @@ Find matched game version in [release page](https://github.com/Jim00000/Zombies-
 
 You should find "cheat is activated." message at the bottom of title scene as following:
 
-![url of image is broken](https://i.imgur.com/UChEuZk.png)
+![url of image is broken](https://i.imgur.com/wP81Jvo.png)
 
 ## User guide
 
 Use F7 to open cheat panel.
 
-![url of image is broken](https://i.imgur.com/oVD4Ezs.png)
+![url of image is broken](https://i.imgur.com/dh3GIEE.png)
 
 ## License
 
