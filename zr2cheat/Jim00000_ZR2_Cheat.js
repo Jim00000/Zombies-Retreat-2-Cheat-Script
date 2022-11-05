@@ -223,7 +223,6 @@
     function __handleCheat__() {
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - last_frame_count > 30) {
-            __setMaxMoney__();
             if (is_full_hp_enabled) {
                 __setFullHP__();
             }
@@ -244,11 +243,6 @@
             // Update frame count
             last_frame_count = Graphics.frameCount;
         }
-    };
-
-    function __setMaxMoney__() {
-        // Set money 99999999999
-        $gameParty._gold = 99999999999;
     };
 
     function __setFullHP__() {
