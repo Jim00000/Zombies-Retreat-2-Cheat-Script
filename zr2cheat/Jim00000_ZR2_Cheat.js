@@ -418,7 +418,7 @@
 
     function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
-        $gameTemp._isPlaytest = true;
+        // $gameTemp._isPlaytest = true;
 
         // Cheating
         __handleCheat__();
