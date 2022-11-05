@@ -260,6 +260,10 @@
         const maxHP = $gameVariables.value(19);
         // Current HP (id = 18) - set to 99999
         $gameVariables.setValue(18, maxHP + 1);
+        // Lucy HP (id = 55) - set to 4
+        $gameVariables.setValue(55, 4);
+        // Horde Survivor HP (id = 60) - set to 4
+        $gameVariables.setValue(60, 4);
     };
 
     function __setFullItems__() {
