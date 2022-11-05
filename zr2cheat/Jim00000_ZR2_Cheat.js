@@ -24,7 +24,7 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.9.2
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.10.3
 // ▶ Update         : 10.01.2022
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
@@ -40,7 +40,7 @@
     let is_full_item_enabled = false;
     let enemy_count = 0;
     let original_color_tone = [];
-    const supported_game_version = 'beta 0.9.2'
+    const supported_game_version = 'beta 0.10.3'
     const toggle_cheat_panel_virtualkey = 118  // F7
     const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
@@ -54,6 +54,8 @@
         }
         process.exit(0);  // terminate this process
     });
+
+    process.emit('ResetCheat');
 
     process.addListener('OnCheatPaneProcessReadyTriggered', () => {
         // synchronize cheat status with cheat panel
@@ -188,9 +190,19 @@
     function __isEnemyCharacterEvent__(event) {
         const name = event.characterName();
         const enemy_name_list = [
-            'Male_Zombies', 'Male_Zombies_Gore', 'PHC_Em-Serv-ZomA2',
-            'PHC_Em-Serv-ZomGoreB2', 'PHC_Em-Serv-ZomB2',
-            'PHC_Em-Serv-ZomGoreA2', 'Zombies_Med1', 'Zombies_Med2'
+            'HC_Zombies2A',           //
+            'HC_Zombies2B',           //
+            'HC_Zombies2C',           //
+            'HC_Zombies2D',           //
+            'HC_Zombies3C',           //
+            'Male_Zombies',           //
+            'Male_Zombies_Gore',      //
+            'PHC_Em-Serv-ZomA2',      //
+            'PHC_Em-Serv-ZomB2',      //
+            'PHC_Em-Serv-ZomGoreA2',  //
+            'PHC_Em-Serv-ZomGoreB2',  //
+            'Zombies_Med1',           //
+            'Zombies_Med2'            //
         ];
         let isEnemy = false;
         enemy_name_list.forEach(candicate => {
@@ -223,7 +235,6 @@
     function __handleCheat__() {
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - last_frame_count > 30) {
-            __setMaxMoney__();
             if (is_full_hp_enabled) {
                 __setFullHP__();
             }
@@ -246,16 +257,15 @@
         }
     };
 
-    function __setMaxMoney__() {
-        // Set money 99999999999
-        $gameParty._gold = 99999999999;
-    };
-
     function __setFullHP__() {
         // Max HP (id = 19)
         const maxHP = $gameVariables.value(19);
         // Current HP (id = 18) - set to 99999
         $gameVariables.setValue(18, maxHP + 1);
+        // Lucy HP (id = 55) - set to 4
+        $gameVariables.setValue(55, 4);
+        // Horde Survivor HP (id = 60) - set to 4
+        $gameVariables.setValue(60, 4);
     };
 
     function __setFullItems__() {
@@ -322,6 +332,15 @@
         $gameParty._items[85] = 99;  // Water (x3)
         $gameParty._items[86] = 99;  // Food (Grain) (x3)
         $gameParty._items[87] = 99;  // Electric Fuse (x3)
+        // $gameParty._items[95] =;  // Halloween Candy
+        // $gameParty._items[96] =;  // Vending Machine Token
+        // $gameParty._items[97] =;  // Tasty Juice
+        // $gameParty._items[98] =;  // Brittle Shovel
+        // $gameParty._items[99] =;  // Strange Orb
+        // $gameParty._items[100] =; // Cursed Orb
+        // $gameParty._items[101] =; // Purified Orb
+        // $gameParty._items[102] =; // Pumpkin
+        // $gameParty._items[103] =; // Jack-O-Lantern
     };
 
     function __disableDarkScene__() {
@@ -399,7 +418,7 @@
 
     function __cheatInjection__() {
         // Use this to open debug mode, and F9 to open debug panel.
-        //$gameTemp._isPlaytest = true;
+        $gameTemp._isPlaytest = true;
 
         // Cheating
         __handleCheat__();
@@ -440,7 +459,7 @@
         text._text = `Cheat is activated. Support Game Version: ${
             supported_game_version}`;
         text.style.fill = 0x000000;  // white color
-        text.x = 420;
+        text.x = 400;
         text.y = Graphics.boxHeight - 15 - text.style.fontSize;
         text.alpha = 1.0;
         text.updateText();
