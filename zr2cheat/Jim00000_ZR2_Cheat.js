@@ -40,7 +40,7 @@
     let is_full_item_enabled = false;
     let enemy_count = 0;
     let original_color_tone = [];
-    const supported_game_version = 'beta 0.10.3'
+    const supported_game_version = 'beta 0.11.1'
     const toggle_cheat_panel_virtualkey = 118  // F7
     const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
