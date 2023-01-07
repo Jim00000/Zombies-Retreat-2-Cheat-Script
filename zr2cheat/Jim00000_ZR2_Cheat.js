@@ -1,6 +1,6 @@
 {
     /*
-    Copyright (C) 2021-2022 Jim00000
+    Copyright (C) 2021-2023 Jim00000
 
     This file is part of Zombies-Retreat-2-Cheat-Script.
 
@@ -24,8 +24,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.10.3
-// ▶ Update         : 10.01.2022
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.11.1
+// ▶ Update         : 01.07.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@
     let is_full_item_enabled = false;
     let enemy_count = 0;
     let original_color_tone = [];
-    const supported_game_version = 'beta 0.10.3'
+    const supported_game_version = 'beta 0.11.1'
     const toggle_cheat_panel_virtualkey = 118  // F7
     const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
@@ -299,10 +299,14 @@
         $gameParty._items[30] = 99;  // Fishing rod
         $gameParty._items[31] = 99;  // Wood Cutting Axe
         $gameParty._items[32] = 99;  // Metal-Cutting Saw
-        // $gameParty._items[33] =;  // Hookshot
+        $gameParty._items[33] = 99;  // Heavy Hammer
         $gameParty._items[34] = 99;  // Z-Cola
         // $gameParty._items[35] =;  // Erotic Soap
         // $gameParty._items[36] =;  // Misty's Endorsement
+        $gameParty._items[37] = 99;  // Nuclear Fish
+        $gameParty._items[38] = 99;  // Golden Fish
+        $gameParty._items[39] = 99;  // Magma Fish
+        $gameParty._items[40] = 99;  // Rusty Can
         // $gameParty._items[42] =;  // Police Station Key
         // $gameParty._items[43] =;  // Nostalgic Flower
         // $gameParty._items[44] =;  // Hydro Plant Key
