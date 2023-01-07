@@ -24,8 +24,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.10.3
-// ▶ Update         : 10.01.2022
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.11.1
+// ▶ Update         : 01.07.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
