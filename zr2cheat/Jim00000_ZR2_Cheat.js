@@ -299,10 +299,14 @@
         $gameParty._items[30] = 99;  // Fishing rod
         $gameParty._items[31] = 99;  // Wood Cutting Axe
         $gameParty._items[32] = 99;  // Metal-Cutting Saw
-        // $gameParty._items[33] =;  // Hookshot
+        $gameParty._items[33] = 99;  // Heavy Hammer
         $gameParty._items[34] = 99;  // Z-Cola
         // $gameParty._items[35] =;  // Erotic Soap
         // $gameParty._items[36] =;  // Misty's Endorsement
+        $gameParty._items[37] = 99;  // Nuclear Fish
+        $gameParty._items[38] = 99;  // Golden Fish
+        $gameParty._items[39] = 99;  // Magma Fish
+        $gameParty._items[40] = 99;  // Rusty Can
         // $gameParty._items[42] =;  // Police Station Key
         // $gameParty._items[43] =;  // Nostalgic Flower
         // $gameParty._items[44] =;  // Hydro Plant Key
