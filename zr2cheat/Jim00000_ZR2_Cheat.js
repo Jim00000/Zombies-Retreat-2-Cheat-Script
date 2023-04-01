@@ -24,8 +24,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.11.1
-// ▶ Update         : 01.07.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.12.3
+// ▶ Update         : 04.01.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@
     let is_full_item_enabled = false;
     let enemy_count = 0;
     let original_color_tone = [];
-    const supported_game_version = 'beta 0.11.1'
+    const supported_game_version = 'beta 0.12.3'
     const toggle_cheat_panel_virtualkey = 118  // F7
     const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
