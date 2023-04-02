@@ -37,7 +37,7 @@ You should find "cheat is activated." message at the bottom of title scene as fo
 
 Use F7 to open cheat panel.
 
-![url of image is broken](https://i.imgur.com/dh3GIEE.png)
+![url of image is broken](https://i.imgur.com/4FyzeXZ.png)
 
 ## License
 
