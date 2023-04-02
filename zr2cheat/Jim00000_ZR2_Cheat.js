@@ -24,8 +24,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.11.1
-// ▶ Update         : 01.07.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.12.3
+// ▶ Update         : 04.01.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@
     let is_full_item_enabled = false;
     let enemy_count = 0;
     let original_color_tone = [];
-    const supported_game_version = 'beta 0.11.1'
+    const supported_game_version = 'beta 0.12.3'
     const toggle_cheat_panel_virtualkey = 118  // F7
     const remove_all_enemies_virtualkey = 119  // F8
     const remove_all_enemies_keyname = 'remove_all_enemies';
@@ -387,6 +387,8 @@
             __checkAndHandleMedicinalMayhemQuestSynthesizeHerbsHint__();
         is_hint_enabled |=
             __checkAndHandleShowStoppersQuestPickArcadeMachineHint__();
+        // Quest: Sex Ed (the mission which needs code to unlock Issac's locker)
+        is_hint_enabled |= __checkAndShowHintOfLocker__();
         if (is_hint_enabled === false) {
             __disableQuestHintInfo__();
         }
@@ -418,6 +420,23 @@
             return true;
         }
         return false;
+    };
+
+    function __checkSexEdQuestActive__() {
+        const nadia_sex_cutscene = $gameSwitches.value(186);
+        // the quest is active if nadia_sex_cutscene switch is off
+        const trigger = !nadia_sex_cutscene;
+        const map_id = $gameMap.mapId();
+        return trigger === true && map_id === 101;
+    };
+
+    function __checkAndShowHintOfLocker__() {
+        const enabled = __checkSexEdQuestActive__();
+        if (enabled) {
+            __enableQuestHintInfo__();
+            __updateQuestHintMessage__('Isaac locker code: 5704811269');
+        }
+        return enabled;
     };
 
     function __cheatInjection__() {
@@ -593,6 +612,17 @@
         return isUpdated;
     };
 
+    // Hook Window_NameInput.prototype.initialize
+    const Hook__Window_NameInput__initialize =
+        Window_NameInput.prototype.initialize;
+    Window_NameInput.prototype.initialize = function(editWindow) {
+        // fill the right answer if Sex Ed quest is active
+        if (__checkSexEdQuestActive__()) {
+            editWindow._name = '5704811269';
+        }
+        Hook__Window_NameInput__initialize.call(this, editWindow);
+    };
+
     // Hook SceneManager.updateMain method
     const Hook__SceneManager__updateMain = SceneManager.updateMain;
     SceneManager.updateMain = function() {
@@ -640,6 +670,14 @@ const zr2cheat = {
                 }
             }
         });
+    },
+    print_all_switch_name: function() {
+        $dataSystem['switches'].forEach((str, idx) => {
+            if (idx < $gameSwitches._data.length && str !== '' &&
+                $gameSwitches.value(idx) === true) {
+                console.log(`${idx} : ${str}`)
+            }
+        })
     },
     // check the environment is desktop.
     // This cheat doesn't support mobile device.
