@@ -387,6 +387,8 @@
             __checkAndHandleMedicinalMayhemQuestSynthesizeHerbsHint__();
         is_hint_enabled |=
             __checkAndHandleShowStoppersQuestPickArcadeMachineHint__();
+        // Quest: Sex Ed (the mission which needs code to unlock Issac's locker)
+        is_hint_enabled |= __checkAndShowHintOfLocker__();
         if (is_hint_enabled === false) {
             __disableQuestHintInfo__();
         }
@@ -418,6 +420,23 @@
             return true;
         }
         return false;
+    };
+
+    function __checkSexEdQuestActive__() {
+        const nadia_sex_cutscene = $gameSwitches.value(186);
+        // the quest is active if nadia_sex_cutscene switch is off
+        const trigger = !nadia_sex_cutscene;
+        const map_id = $gameMap.mapId();
+        return trigger === true && map_id === 101;
+    };
+
+    function __checkAndShowHintOfLocker__() {
+        const enabled = __checkSexEdQuestActive__();
+        if (enabled) {
+            __enableQuestHintInfo__();
+            __updateQuestHintMessage__('Isaac locker code: 5704811269');
+        }
+        return enabled;
     };
 
     function __cheatInjection__() {
@@ -591,6 +610,17 @@
         __monitorCustomInputSetup__();
         isUpdated |= __monitorCustomInput__();
         return isUpdated;
+    };
+
+    // Hook Window_NameInput.prototype.initialize
+    const Hook__Window_NameInput__initialize =
+        Window_NameInput.prototype.initialize;
+    Window_NameInput.prototype.initialize = function(editWindow) {
+        // fill the right answer if Sex Ed quest is active
+        if (__checkSexEdQuestActive__()) {
+            editWindow._name = '5704811269';
+        }
+        Hook__Window_NameInput__initialize.call(this, editWindow);
     };
 
     // Hook SceneManager.updateMain method
