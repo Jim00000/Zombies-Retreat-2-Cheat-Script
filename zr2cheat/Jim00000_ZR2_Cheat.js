@@ -641,6 +641,14 @@ const zr2cheat = {
             }
         });
     },
+    print_all_switch_name: function() {
+        $dataSystem['switches'].forEach((str, idx) => {
+            if (idx < $gameSwitches._data.length && str !== '' &&
+                $gameSwitches.value(idx) === true) {
+                console.log(`${idx} : ${str}`)
+            }
+        })
+    },
     // check the environment is desktop.
     // This cheat doesn't support mobile device.
     is_desktop_application: function() {
