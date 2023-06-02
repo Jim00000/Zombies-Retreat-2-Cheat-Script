@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.12.3
-// ▶ Update         : 04.09.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.13.0
+// ▶ Update         : 06.02.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ class ZR2CheatManager {
     static fadeEffectHandlerId = -1;
     static is_zombie_freezed = false;
     static enemy_count = 0;
-    static supported_game_version = 'beta 0.12.3';
+    static supported_game_version = 'beta 0.13.0';
     static original_zr2_title = document.title;
 
     static buildCheatScriptInfo() {
@@ -153,7 +153,7 @@ class ZR2CheatEventHandler {
 
     static handleCheat() {
         // Use this to open debug mode, and F9 to open debug panel.
-        // $gameTemp._isPlaytest = true;
+        $gameTemp._isPlaytest = true;
 
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - ZR2CheatManager.last_frame_count > 30) {
