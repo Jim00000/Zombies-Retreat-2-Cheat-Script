@@ -153,7 +153,7 @@ class ZR2CheatEventHandler {
 
     static handleCheat() {
         // Use this to open debug mode, and F9 to open debug panel.
-        $gameTemp._isPlaytest = true;
+        // $gameTemp._isPlaytest = true;
 
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - ZR2CheatManager.last_frame_count > 30) {
