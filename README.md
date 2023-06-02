@@ -31,7 +31,7 @@ Find matched game version in [release page](https://github.com/Jim00000/Zombies-
 
 You should find "cheat is activated." message at the bottom of title scene as following:
 
-![url of image is broken](https://i.imgur.com/xiS6CGK.png)
+![url of image is broken](https://hackmd.io/_uploads/BkxDDYPUn.png)
 
 ## User guide
 
