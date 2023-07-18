@@ -355,8 +355,9 @@ class ZR2CheatFullItem {
         // $gameParty._items[43] =;  // Nostalgic Flower
         // $gameParty._items[44] =;  // Hydro Plant Key
         // $gameParty._items[45] =;  // Storage Crane Card A
+        // $gameParty._items[47] =;  // Storage Crane Card C
         // $gameParty._items[50] =;  // Fiona's Shop Schematic
-        // $gameParty._items[51] =;  // Garden Schematic
+        // $gameParty._items[51] =;  // Fresh Garden Schematic
         // $gameParty._items[52] =;  // Communications Kit
         // $gameParty._items[53] =;  // Subway Blue Card
         // $gameParty._items[55] =;  // Helios Module B
@@ -372,6 +373,7 @@ class ZR2CheatFullItem {
         $gameParty._items[72] = 99;  // Chocolate [Stacy]
         $gameParty._items[73] = 99;  // Milk [Stacy]
         // $gameParty._items[75] =;  // Flare Gun [Lucy]
+        // $gameParty._items[77] =;  // Special Battery
         // $gameParty._items[79] =;  // Digital Camera
         // $gameParty._items[80] =;  // Silk Bra
         $gameParty._items[82] = 99;  // Scrap Wood (x3)
@@ -389,6 +391,8 @@ class ZR2CheatFullItem {
         // $gameParty._items[101] =; // Purified Orb
         // $gameParty._items[102] =; // Pumpkin
         // $gameParty._items[103] =; // Jack-O-Lantern
+        // $gameParty._items[110] =; // Fresh Garden(+) Schematic
+        // $gameParty._items[111] =; // Water Filter(+) Schematic
     }
 }
 
