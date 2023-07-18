@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.13.0
-// ▶ Update         : 06.02.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.14.4
+// ▶ Update         : 07.18.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ class ZR2CheatManager {
     static fadeEffectHandlerId = -1;
     static is_zombie_freezed = false;
     static enemy_count = 0;
-    static supported_game_version = 'beta 0.13.0';
+    static supported_game_version = 'beta 0.14.4';
     static original_zr2_title = document.title;
 
     static buildCheatScriptInfo() {
@@ -153,7 +153,7 @@ class ZR2CheatEventHandler {
 
     static handleCheat() {
         // Use this to open debug mode, and F9 to open debug panel.
-        $gameTemp._isPlaytest = true;
+        // $gameTemp._isPlaytest = true;
 
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - ZR2CheatManager.last_frame_count > 30) {
@@ -355,8 +355,9 @@ class ZR2CheatFullItem {
         // $gameParty._items[43] =;  // Nostalgic Flower
         // $gameParty._items[44] =;  // Hydro Plant Key
         // $gameParty._items[45] =;  // Storage Crane Card A
+        // $gameParty._items[47] =;  // Storage Crane Card C
         // $gameParty._items[50] =;  // Fiona's Shop Schematic
-        // $gameParty._items[51] =;  // Garden Schematic
+        // $gameParty._items[51] =;  // Fresh Garden Schematic
         // $gameParty._items[52] =;  // Communications Kit
         // $gameParty._items[53] =;  // Subway Blue Card
         // $gameParty._items[55] =;  // Helios Module B
@@ -372,6 +373,7 @@ class ZR2CheatFullItem {
         $gameParty._items[72] = 99;  // Chocolate [Stacy]
         $gameParty._items[73] = 99;  // Milk [Stacy]
         // $gameParty._items[75] =;  // Flare Gun [Lucy]
+        // $gameParty._items[77] =;  // Special Battery
         // $gameParty._items[79] =;  // Digital Camera
         // $gameParty._items[80] =;  // Silk Bra
         $gameParty._items[82] = 99;  // Scrap Wood (x3)
@@ -389,6 +391,8 @@ class ZR2CheatFullItem {
         // $gameParty._items[101] =; // Purified Orb
         // $gameParty._items[102] =; // Pumpkin
         // $gameParty._items[103] =; // Jack-O-Lantern
+        // $gameParty._items[110] =; // Fresh Garden(+) Schematic
+        // $gameParty._items[111] =; // Water Filter(+) Schematic
     }
 }
 
