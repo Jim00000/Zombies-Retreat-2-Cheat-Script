@@ -25,19 +25,43 @@
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
-class ZR2CheatManager {
-    static last_frame_count = 0;
-    static speed_multiplier = 1.0;
-    static fadeEffectHandlerId = -1;
-    static is_zombie_freezed = false;
-    static enemy_count = 0;
-    static supported_game_version = 'beta 0.14.4';
-    static original_zr2_title = document.title;
+var last_frame_count = 0;
+var speed_multiplier = 1.0;
+var fadeEffectHandlerId = -1;
+var is_zombie_freezed = false;
+var enemy_count = 0;
+var supported_game_version = 'beta 0.14.4';
+var original_zr2_title = document.title;
+var enemy_name_list = [
+        'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
+        'HC_Zombies3C', 'Male_Zombies', 'Male_Zombies_Gore',
+        'PHC_Em-Serv-ZomA2', 'PHC_Em-Serv-ZomB2', 'PHC_Em-Serv-ZomGoreA2',
+        'PHC_Em-Serv-ZomGoreB2', 'Zombies_Med1', 'Zombies_Med2'];
+var toggle_cheat_panel_virtualkey = 118;  // F7
+var remove_all_enemies_virtualkey = 119;  // F8
+var remove_all_enemies_keyname = 'remove_all_enemies';
+var toggle_cheat_panel_keyname = 'toggle_cheat_panel';
+var is_full_hp_enabled = false;
+var is_full_item_enabled = false;
+var original_color_tone = [];
+var is_dark_scene_disabled = false;
+var is_cheat_panel_open = false;
+var original = {
+    SceneManager: {updateMain: SceneManager.updateMain},
+    Window_NameInput: {initialize: Window_NameInput.prototype.initialize},
+    Window_Message: {updateInput: Window_Message.prototype.updateInput},
+    Scene_Title: {create: Scene_Title.prototype.create},
+    Scene_Map: {
+        createDisplayObjects: Scene_Map.prototype.createDisplayObjects,
+        update: Scene_Map.prototype.update
+    }
+}
 
+class ZR2CheatManager {
     static buildCheatScriptInfo() {
         let text = new PIXI.Text('', ZR2CheatManager.createDefaultTextStyle());
         text._text = `Cheat is activated. Support Game Version: ${
-            ZR2CheatManager.supported_game_version}`;
+            supported_game_version}`;
         text.style.fill = 0x000000;  // white color
         text.x = 400;
         text.y = Graphics.boxHeight - 15 - text.style.fontSize;
@@ -78,7 +102,7 @@ class ZR2CheatManager {
     static buildSpeedChangeInfo() {
         let text = new PIXI.Text('', ZR2CheatManager.createDefaultTextStyle());
         text._text = ZR2CheatManager.createSpeedMultiplierMessageBoilerplate(
-            ZR2CheatManager.speed_multiplier);
+            speed_multiplier);
         text.x = 5;
         text.alpha = 0;
         text.updateText();
@@ -111,7 +135,7 @@ class ZR2CheatManager {
     }
 
     static updateZombieMovementFreezedChangedInfo() {
-        const text = ZR2CheatManager.is_zombie_freezed ?
+        const text = is_zombie_freezed ?
             `Freeze all zombie's movement` :
             `All zombie can move right now`;
         ZR2CheatManager.updateNotificationMessage(text);
@@ -125,57 +149,50 @@ class ZR2CheatManager {
     }
 
     static registerNotificationFadeEffect() {
-        if (ZR2CheatManager.fadeEffectHandlerId != -1) {
-            clearInterval(ZR2CheatManager.fadeEffectHandlerId);
-            ZR2CheatManager.fadeEffectHandlerId = -1;
+        if (fadeEffectHandlerId != -1) {
+            clearInterval(fadeEffectHandlerId);
+            fadeEffectHandlerId = -1;
         }
 
-        ZR2CheatManager.fadeEffectHandlerId = setInterval(() => {
+        fadeEffectHandlerId = setInterval(() => {
             if (SceneManager._scene.speedChangeInfo !== undefined) {
                 if (SceneManager._scene.speedChangeInfo.alpha > 0) {
                     SceneManager._scene.speedChangeInfo.alpha -= 0.20
                 }
             } else {
-                clearInterval(ZR2CheatManager.fadeEffectHandlerId);
-                ZR2CheatManager.fadeEffectHandlerId = -1;
+                clearInterval(fadeEffectHandlerId);
+                fadeEffectHandlerId = -1;
             }
         }, 100);
     }
 }
 
 class ZR2CheatEventHandler {
-    static enemy_name_list = [
-        'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
-        'HC_Zombies3C', 'Male_Zombies', 'Male_Zombies_Gore',
-        'PHC_Em-Serv-ZomA2', 'PHC_Em-Serv-ZomB2', 'PHC_Em-Serv-ZomGoreA2',
-        'PHC_Em-Serv-ZomGoreB2', 'Zombies_Med1', 'Zombies_Med2'
-    ];
-
     static handleCheat() {
         // Use this to open debug mode, and F9 to open debug panel.
         // $gameTemp._isPlaytest = true;
 
         // update every 30 frame (~0.5 seconds)
-        if (Graphics.frameCount - ZR2CheatManager.last_frame_count > 30) {
-            if (ZR2CheatFullHP.is_full_hp_enabled) {
+        if (Graphics.frameCount - last_frame_count > 30) {
+            if (is_full_hp_enabled) {
                 ZR2CheatFullHP.setFullHP();
             }
-            if (ZR2CheatFullItem.is_full_item_enabled) {
+            if (is_full_item_enabled) {
                 ZR2CheatFullItem.setFullItems();
             }
-            if (ZR2CheatLightingController.is_dark_scene_disabled) {
+            if (is_dark_scene_disabled) {
                 ZR2CheatLightingController.disableDarkScene();
             }
-            if (ZR2CheatManager.is_zombie_freezed) {
+            if (is_zombie_freezed) {
                 ZR2CheatEventHandler.onZombieMovementFreezedTriggered();
             }
-            if (ZR2ChearPanelManager.is_cheat_panel_open) {
+            if (is_cheat_panel_open) {
                 ZR2ChearPanelManager.updateEnemyCountOnCheatPanel();
             }
             // Tell the player hint if possible
             ZR2CheatEventHandler.handlePuzzleHint();
             // Update frame count
-            ZR2CheatManager.last_frame_count = Graphics.frameCount;
+            last_frame_count = Graphics.frameCount;
         }
     }
 
@@ -198,7 +215,7 @@ class ZR2CheatEventHandler {
     static isEnemyCharacterEvent(event) {
         const name = event.characterName();
         let isEnemy = false;
-        ZR2CheatEventHandler.enemy_name_list.forEach(candicate => {
+        enemy_name_list.forEach(candicate => {
             isEnemy |= (name === candicate);
         });
         return isEnemy;
@@ -226,22 +243,22 @@ class ZR2CheatEventHandler {
 
     static onToggleCheatPanelTriggered() {
         if (nw !== undefined &&
-            ZR2ChearPanelManager.is_cheat_panel_open === false) {
+            is_cheat_panel_open === false) {
             nw.Window.open(
                 'www/js/plugins/zr2cheat/cheat_panel/index.html', {}, (win) => {
                     // onClosed event
                     win.on('closed', function() {
                         win = null;
-                        ZR2ChearPanelManager.is_cheat_panel_open = false;
+                        is_cheat_panel_open = false;
                     });
                 });
-            ZR2ChearPanelManager.is_cheat_panel_open = true;
+            is_cheat_panel_open = true;
         }
     }
 
     static onSpeedMultiplierChange(multiplier) {
         if (1.0 <= multiplier && multiplier <= 3.5) {
-            ZR2CheatManager.speed_multiplier = multiplier;
+            speed_multiplier = multiplier;
             ZR2CheatManager.updateSpeedChangeInfo(multiplier);
         }
     }
@@ -267,27 +284,22 @@ class ZR2CheatEventHandler {
 }
 
 class ZR2CheatInputManager {
-    static toggle_cheat_panel_virtualkey = 118;  // F7
-    static remove_all_enemies_virtualkey = 119;  // F8
-    static remove_all_enemies_keyname = 'remove_all_enemies';
-    static toggle_cheat_panel_keyname = 'toggle_cheat_panel';
-
     static monitorCustomInputSetup() {
-        Input.keyMapper[ZR2CheatInputManager.remove_all_enemies_virtualkey] =
-            ZR2CheatInputManager.remove_all_enemies_keyname;
-        Input.keyMapper[ZR2CheatInputManager.toggle_cheat_panel_virtualkey] =
-            ZR2CheatInputManager.toggle_cheat_panel_keyname;
+        Input.keyMapper[remove_all_enemies_virtualkey] =
+            remove_all_enemies_keyname;
+        Input.keyMapper[toggle_cheat_panel_virtualkey] =
+            toggle_cheat_panel_keyname;
     }
 
     static monitorCustomInput() {
         if (!SceneManager.isSceneChanging()) {
             if (Input.isTriggered(
-                    ZR2CheatInputManager.remove_all_enemies_keyname)) {
+                    remove_all_enemies_keyname)) {
                 ZR2CheatEventHandler.onRemoveAllEnemiesTriggered();
                 return true;
             }
             if (Input.isTriggered(
-                    ZR2CheatInputManager.toggle_cheat_panel_keyname)) {
+                    toggle_cheat_panel_keyname)) {
                 ZR2CheatEventHandler.onToggleCheatPanelTriggered();
                 return true;
             }
@@ -297,7 +309,6 @@ class ZR2CheatInputManager {
 }
 
 class ZR2CheatFullHP {
-    static is_full_hp_enabled = false;
     static setFullHP() {
         // Max HP (id = 19)
         const maxHP = $gameVariables.value(19);
@@ -311,7 +322,6 @@ class ZR2CheatFullHP {
 }
 
 class ZR2CheatFullItem {
-    static is_full_item_enabled = false;
     static setFullItems() {
         $gameParty._items[1] = 99;   // Scrap Metal
         $gameParty._items[2] = 99;   // Scrap Wood
@@ -397,13 +407,10 @@ class ZR2CheatFullItem {
 }
 
 class ZR2CheatLightingController {
-    static original_color_tone = [];
-    static is_dark_scene_disabled = false;
-
     static disableDarkScene() {
         // Keep original color tone
         if ($gameScreen.tone().toString() !== '0,0,0,0') {
-            ZR2CheatLightingController.original_color_tone =
+            original_color_tone =
                 $gameScreen.tone().clone();
         }
         // Set color tone to 0 to prevent dim scene
@@ -413,14 +420,14 @@ class ZR2CheatLightingController {
     }
 
     static onToggleDarkSceneTriggered() {
-        if (ZR2CheatLightingController.is_dark_scene_disabled === false) {
+        if (is_dark_scene_disabled === false) {
             // set current color tone only if original color tone exists
-            if (ZR2CheatLightingController.original_color_tone.length > 0) {
+            if (original_color_tone.length > 0) {
                 $gameScreen._tone =
-                    ZR2CheatLightingController.original_color_tone.clone();
+                    original_color_tone.clone();
             }
             // Ditch current saved color tone
-            ZR2CheatLightingController.original_color_tone = [];
+            original_color_tone = [];
             ZR2CheatLightingController.enableTerraxLightingEffect();
         }
         ZR2CheatLightingController.updateDisableDarkSceneInfo();
@@ -428,7 +435,7 @@ class ZR2CheatLightingController {
 
     static updateDisableDarkSceneInfo() {
         const text = `${
-            ZR2CheatLightingController.is_dark_scene_disabled ?
+            is_dark_scene_disabled ?
                 'Disable' :
                 'Enable'} dark scene effect`
         ZR2CheatManager.updateNotificationMessage(text);
@@ -530,11 +537,10 @@ class ZR2CheatPuzzleHint {
 }
 
 class ZR2ChearPanelManager {
-    static is_cheat_panel_open = false;
     static updateEnemyCountOnCheatPanel() {
         const current_enemy_count = ZR2CheatManager.calculateEnemyCount();
-        if (current_enemy_count !== ZR2CheatManager.enemy_count) {
-            ZR2CheatManager.enemy_count = current_enemy_count;
+        if (current_enemy_count !== enemy_count) {
+            enemy_count = current_enemy_count;
             process.emit('UpdateEnemyCountBadge', current_enemy_count);
         }
     }
@@ -548,31 +554,31 @@ class ZR2ChearPanelManager {
         process.addListener('OnCheatPaneProcessReadyTriggered', () => {
             // synchronize cheat status with cheat panel
             process.emit('SynchronizeCheatStatus', {
-                is_full_hp_enabled: ZR2CheatFullHP.is_full_hp_enabled,
-                is_full_item_enabled: ZR2CheatFullItem.is_full_item_enabled,
-                is_zombie_freezed: ZR2CheatManager.is_zombie_freezed,
+                is_full_hp_enabled: is_full_hp_enabled,
+                is_full_item_enabled: is_full_item_enabled,
+                is_zombie_freezed: is_zombie_freezed,
                 is_dark_scene_disabled:
-                    ZR2CheatLightingController.is_dark_scene_disabled,
-                speed_multiplier: ZR2CheatManager.speed_multiplier,
-                enemy_count: ZR2CheatManager.enemy_count,
+                    is_dark_scene_disabled,
+                speed_multiplier: speed_multiplier,
+                enemy_count: enemy_count,
             });
         });
 
         process.addListener('OnFullHPTriggered', (toggle) => {
-            ZR2CheatFullHP.is_full_hp_enabled = toggle;
+            is_full_hp_enabled = toggle;
         });
 
         process.addListener('OnFullItemsTriggered', (toggle) => {
-            ZR2CheatFullItem.is_full_item_enabled = toggle;
+            is_full_item_enabled = toggle;
         });
 
         process.addListener('OnFreezeZombieTriggered', (toggle) => {
-            ZR2CheatManager.is_zombie_freezed = toggle;
+            is_zombie_freezed = toggle;
             ZR2CheatManager.updateZombieMovementFreezedChangedInfo();
         });
 
         process.addListener('OnDisableDarkSceneEffectTriggered', (toggle) => {
-            ZR2CheatLightingController.is_dark_scene_disabled = toggle;
+            is_dark_scene_disabled = toggle;
             ZR2CheatLightingController.onToggleDarkSceneTriggered();
         });
 
@@ -587,43 +593,33 @@ class ZR2ChearPanelManager {
 }
 
 class ZR2CheatHook {
-    static original = {
-        SceneManager: {updateMain: SceneManager.updateMain},
-        Window_NameInput: {initialize: Window_NameInput.prototype.initialize},
-        Window_Message: {updateInput: Window_Message.prototype.updateInput},
-        Scene_Title: {create: Scene_Title.prototype.create},
-        Scene_Map: {
-            createDisplayObjects: Scene_Map.prototype.createDisplayObjects,
-            update: Scene_Map.prototype.update
-        }
-    }
     // Begin to hook functions
     static hook() {
         Scene_Map.prototype.update = function() {
-            ZR2CheatHook.original.Scene_Map.update.call(this, arguments);
+            original.Scene_Map.update.call(this, arguments);
             ZR2CheatEventHandler.handleCheat();
         };
         Scene_Map.prototype.createDisplayObjects = function() {
-            ZR2CheatHook.original.Scene_Map.createDisplayObjects.call(
+            original.Scene_Map.createDisplayObjects.call(
                 this, arguments);
             this.speedChangeInfo = ZR2CheatManager.buildSpeedChangeInfo();
             this.addChild(this.speedChangeInfo);
             this.questHintInfo = ZR2CheatManager.buildQuestHintInfo();
             this.addChild(this.questHintInfo);
             // Ditch old map's color tone
-            ZR2CheatManager.original_color_tone = [];
-            ZR2CheatManager.last_frame_count = Graphics.frameCount;
+            original_color_tone = [];
+            last_frame_count = Graphics.frameCount;
         };
         Scene_Title.prototype.create = function() {
-            ZR2CheatHook.original.Scene_Title.create.call(this, arguments);
+            original.Scene_Title.create.call(this, arguments);
             this.cheatScriptInfo = ZR2CheatManager.buildCheatScriptInfo();
             this.addChild(this.cheatScriptInfo);
-            document.title = ZR2CheatManager.original_zr2_title +
+            document.title = original_zr2_title +
                 ' (Hint: Use F7 to open cheat panel)';
         };
         Window_Message.prototype.updateInput = function() {
             let isUpdated =
-                ZR2CheatHook.original.Window_Message.updateInput.call(
+                original.Window_Message.updateInput.call(
                     this, arguments);
             ZR2CheatInputManager.monitorCustomInputSetup();
             isUpdated |= ZR2CheatInputManager.monitorCustomInput();
@@ -634,7 +630,7 @@ class ZR2CheatHook {
             if (ZR2CheatPuzzleHint.checkSexEdQuestActive()) {
                 editWindow._name = '5704811269';
             }
-            ZR2CheatHook.original.Window_NameInput.initialize.call(
+            original.Window_NameInput.initialize.call(
                 this, editWindow);
         };
         SceneManager.updateMain = function() {
@@ -646,7 +642,7 @@ class ZR2CheatHook {
                 var fTime = (newTime - this._currentTime) / 1000;
                 if (fTime > 0.25) fTime = 0.25;
                 this._currentTime = newTime;
-                this._accumulator += fTime * ZR2CheatManager.speed_multiplier;
+                this._accumulator += fTime * speed_multiplier;
                 while (this._accumulator >= this._deltaTime) {
                     this.updateInputData();
                     this.changeScene();
@@ -708,11 +704,12 @@ class ZR2CheatHelper {
     }
 }
 
+
 // Cheat initialization process
 (() => {
     nw.Window.get().on('close', (win) => {
         // close cheat pane window process if open
-        if (ZR2ChearPanelManager.is_cheat_panel_open) {
+        if (is_cheat_panel_open) {
             process.emit('CloseCheatPane');
         }
         process.exit(0);  // terminate this process
