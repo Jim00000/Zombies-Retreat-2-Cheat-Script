@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.14.4
-// ▶ Update         : 07.18.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.15.2
+// ▶ Update         : 10.14.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -30,19 +30,21 @@ var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.14.4';
+var supported_game_version = 'beta 0.15.2';
 var original_zr2_title = document.title;
 var enemy_name_list = [
-        'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
-        'HC_Zombies3C', 'Male_Zombies', 'Male_Zombies_Gore',
-        'PHC_Em-Serv-ZomA2', 'PHC_Em-Serv-ZomB2', 'PHC_Em-Serv-ZomGoreA2',
-        'PHC_Em-Serv-ZomGoreB2', 'Zombies_Med1', 'Zombies_Med2'];
+    'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
+    'HC_Zombies3C', 'Male_Zombies', 'Male_Zombies_Gore', 'PHC_Em-Serv-ZomA2',
+    'PHC_Em-Serv-ZomB2', 'PHC_Em-Serv-ZomGoreA2', 'PHC_Em-Serv-ZomGoreB2',
+    'Zombies_Med1', 'Zombies_Med2'
+];
 var toggle_cheat_panel_virtualkey = 118;  // F7
 var remove_all_enemies_virtualkey = 119;  // F8
 var remove_all_enemies_keyname = 'remove_all_enemies';
 var toggle_cheat_panel_keyname = 'toggle_cheat_panel';
 var is_full_hp_enabled = false;
 var is_full_item_enabled = false;
+var is_maximum_money_enabled = false;
 var original_color_tone = [];
 var is_dark_scene_disabled = false;
 var is_cheat_panel_open = false;
@@ -135,9 +137,8 @@ class ZR2CheatManager {
     }
 
     static updateZombieMovementFreezedChangedInfo() {
-        const text = is_zombie_freezed ?
-            `Freeze all zombie's movement` :
-            `All zombie can move right now`;
+        const text = is_zombie_freezed ? `Freeze all zombie's movement` :
+                                         `All zombie can move right now`;
         ZR2CheatManager.updateNotificationMessage(text);
         ZR2CheatManager.registerNotificationFadeEffect();
     }
@@ -179,6 +180,10 @@ class ZR2CheatEventHandler {
             }
             if (is_full_item_enabled) {
                 ZR2CheatFullItem.setFullItems();
+            }
+            if (is_maximum_money_enabled) {
+                // Set money 99999999999
+                $gameParty._gold = 99999999999;
             }
             if (is_dark_scene_disabled) {
                 ZR2CheatLightingController.disableDarkScene();
@@ -242,8 +247,7 @@ class ZR2CheatEventHandler {
     }
 
     static onToggleCheatPanelTriggered() {
-        if (nw !== undefined &&
-            is_cheat_panel_open === false) {
+        if (nw !== undefined && is_cheat_panel_open === false) {
             nw.Window.open(
                 'www/js/plugins/zr2cheat/cheat_panel/index.html', {}, (win) => {
                     // onClosed event
@@ -293,13 +297,11 @@ class ZR2CheatInputManager {
 
     static monitorCustomInput() {
         if (!SceneManager.isSceneChanging()) {
-            if (Input.isTriggered(
-                    remove_all_enemies_keyname)) {
+            if (Input.isTriggered(remove_all_enemies_keyname)) {
                 ZR2CheatEventHandler.onRemoveAllEnemiesTriggered();
                 return true;
             }
-            if (Input.isTriggered(
-                    toggle_cheat_panel_keyname)) {
+            if (Input.isTriggered(toggle_cheat_panel_keyname)) {
                 ZR2CheatEventHandler.onToggleCheatPanelTriggered();
                 return true;
             }
@@ -384,6 +386,7 @@ class ZR2CheatFullItem {
         $gameParty._items[73] = 99;  // Milk [Stacy]
         // $gameParty._items[75] =;  // Flare Gun [Lucy]
         // $gameParty._items[77] =;  // Special Battery
+        // $gameParty._items[78] =;  // Battery Locator
         // $gameParty._items[79] =;  // Digital Camera
         // $gameParty._items[80] =;  // Silk Bra
         $gameParty._items[82] = 99;  // Scrap Wood (x3)
@@ -392,6 +395,7 @@ class ZR2CheatFullItem {
         $gameParty._items[85] = 99;  // Water (x3)
         $gameParty._items[86] = 99;  // Food (Grain) (x3)
         $gameParty._items[87] = 99;  // Electric Fuse (x3)
+        // $gameParty._items[94] =;  // Camping Equipment
         // $gameParty._items[95] =;  // Halloween Candy
         // $gameParty._items[96] =;  // Vending Machine Token
         // $gameParty._items[97] =;  // Tasty Juice
@@ -403,6 +407,7 @@ class ZR2CheatFullItem {
         // $gameParty._items[103] =; // Jack-O-Lantern
         // $gameParty._items[110] =; // Fresh Garden(+) Schematic
         // $gameParty._items[111] =; // Water Filter(+) Schematic
+        // $gameParty._items[112] =; // Grain Garden Schematic
     }
 }
 
@@ -410,8 +415,7 @@ class ZR2CheatLightingController {
     static disableDarkScene() {
         // Keep original color tone
         if ($gameScreen.tone().toString() !== '0,0,0,0') {
-            original_color_tone =
-                $gameScreen.tone().clone();
+            original_color_tone = $gameScreen.tone().clone();
         }
         // Set color tone to 0 to prevent dim scene
         $gameScreen.tone().fill(0);
@@ -423,8 +427,7 @@ class ZR2CheatLightingController {
         if (is_dark_scene_disabled === false) {
             // set current color tone only if original color tone exists
             if (original_color_tone.length > 0) {
-                $gameScreen._tone =
-                    original_color_tone.clone();
+                $gameScreen._tone = original_color_tone.clone();
             }
             // Ditch current saved color tone
             original_color_tone = [];
@@ -434,10 +437,8 @@ class ZR2CheatLightingController {
     }
 
     static updateDisableDarkSceneInfo() {
-        const text = `${
-            is_dark_scene_disabled ?
-                'Disable' :
-                'Enable'} dark scene effect`
+        const text =
+            `${is_dark_scene_disabled ? 'Disable' : 'Enable'} dark scene effect`
         ZR2CheatManager.updateNotificationMessage(text);
         ZR2CheatManager.registerNotificationFadeEffect();
     }
@@ -556,9 +557,9 @@ class ZR2ChearPanelManager {
             process.emit('SynchronizeCheatStatus', {
                 is_full_hp_enabled: is_full_hp_enabled,
                 is_full_item_enabled: is_full_item_enabled,
+                is_maximum_money_enabled: is_maximum_money_enabled,
                 is_zombie_freezed: is_zombie_freezed,
-                is_dark_scene_disabled:
-                    is_dark_scene_disabled,
+                is_dark_scene_disabled: is_dark_scene_disabled,
                 speed_multiplier: speed_multiplier,
                 enemy_count: enemy_count,
             });
@@ -570,6 +571,10 @@ class ZR2ChearPanelManager {
 
         process.addListener('OnFullItemsTriggered', (toggle) => {
             is_full_item_enabled = toggle;
+        });
+
+        process.addListener('OnMaxMoneyTriggered', (toggle) => {
+            is_maximum_money_enabled = toggle;
         });
 
         process.addListener('OnFreezeZombieTriggered', (toggle) => {
@@ -600,8 +605,7 @@ class ZR2CheatHook {
             ZR2CheatEventHandler.handleCheat();
         };
         Scene_Map.prototype.createDisplayObjects = function() {
-            original.Scene_Map.createDisplayObjects.call(
-                this, arguments);
+            original.Scene_Map.createDisplayObjects.call(this, arguments);
             this.speedChangeInfo = ZR2CheatManager.buildSpeedChangeInfo();
             this.addChild(this.speedChangeInfo);
             this.questHintInfo = ZR2CheatManager.buildQuestHintInfo();
@@ -614,13 +618,12 @@ class ZR2CheatHook {
             original.Scene_Title.create.call(this, arguments);
             this.cheatScriptInfo = ZR2CheatManager.buildCheatScriptInfo();
             this.addChild(this.cheatScriptInfo);
-            document.title = original_zr2_title +
-                ' (Hint: Use F7 to open cheat panel)';
+            document.title =
+                original_zr2_title + ' (Hint: Use F7 to open cheat panel)';
         };
         Window_Message.prototype.updateInput = function() {
             let isUpdated =
-                original.Window_Message.updateInput.call(
-                    this, arguments);
+                original.Window_Message.updateInput.call(this, arguments);
             ZR2CheatInputManager.monitorCustomInputSetup();
             isUpdated |= ZR2CheatInputManager.monitorCustomInput();
             return isUpdated;
@@ -630,8 +633,7 @@ class ZR2CheatHook {
             if (ZR2CheatPuzzleHint.checkSexEdQuestActive()) {
                 editWindow._name = '5704811269';
             }
-            original.Window_NameInput.initialize.call(
-                this, editWindow);
+            original.Window_NameInput.initialize.call(this, editWindow);
         };
         SceneManager.updateMain = function() {
             if (Utils.isMobileSafari()) {
