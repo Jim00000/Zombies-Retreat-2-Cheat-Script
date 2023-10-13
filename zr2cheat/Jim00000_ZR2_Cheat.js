@@ -33,10 +33,11 @@ var enemy_count = 0;
 var supported_game_version = 'beta 0.15.2';
 var original_zr2_title = document.title;
 var enemy_name_list = [
-        'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
-        'HC_Zombies3C', 'Male_Zombies', 'Male_Zombies_Gore',
-        'PHC_Em-Serv-ZomA2', 'PHC_Em-Serv-ZomB2', 'PHC_Em-Serv-ZomGoreA2',
-        'PHC_Em-Serv-ZomGoreB2', 'Zombies_Med1', 'Zombies_Med2'];
+    'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
+    'HC_Zombies3C', 'Male_Zombies', 'Male_Zombies_Gore', 'PHC_Em-Serv-ZomA2',
+    'PHC_Em-Serv-ZomB2', 'PHC_Em-Serv-ZomGoreA2', 'PHC_Em-Serv-ZomGoreB2',
+    'Zombies_Med1', 'Zombies_Med2'
+];
 var toggle_cheat_panel_virtualkey = 118;  // F7
 var remove_all_enemies_virtualkey = 119;  // F8
 var remove_all_enemies_keyname = 'remove_all_enemies';
@@ -136,9 +137,8 @@ class ZR2CheatManager {
     }
 
     static updateZombieMovementFreezedChangedInfo() {
-        const text = is_zombie_freezed ?
-            `Freeze all zombie's movement` :
-            `All zombie can move right now`;
+        const text = is_zombie_freezed ? `Freeze all zombie's movement` :
+                                         `All zombie can move right now`;
         ZR2CheatManager.updateNotificationMessage(text);
         ZR2CheatManager.registerNotificationFadeEffect();
     }
@@ -247,8 +247,7 @@ class ZR2CheatEventHandler {
     }
 
     static onToggleCheatPanelTriggered() {
-        if (nw !== undefined &&
-            is_cheat_panel_open === false) {
+        if (nw !== undefined && is_cheat_panel_open === false) {
             nw.Window.open(
                 'www/js/plugins/zr2cheat/cheat_panel/index.html', {}, (win) => {
                     // onClosed event
@@ -298,13 +297,11 @@ class ZR2CheatInputManager {
 
     static monitorCustomInput() {
         if (!SceneManager.isSceneChanging()) {
-            if (Input.isTriggered(
-                    remove_all_enemies_keyname)) {
+            if (Input.isTriggered(remove_all_enemies_keyname)) {
                 ZR2CheatEventHandler.onRemoveAllEnemiesTriggered();
                 return true;
             }
-            if (Input.isTriggered(
-                    toggle_cheat_panel_keyname)) {
+            if (Input.isTriggered(toggle_cheat_panel_keyname)) {
                 ZR2CheatEventHandler.onToggleCheatPanelTriggered();
                 return true;
             }
@@ -418,8 +415,7 @@ class ZR2CheatLightingController {
     static disableDarkScene() {
         // Keep original color tone
         if ($gameScreen.tone().toString() !== '0,0,0,0') {
-            original_color_tone =
-                $gameScreen.tone().clone();
+            original_color_tone = $gameScreen.tone().clone();
         }
         // Set color tone to 0 to prevent dim scene
         $gameScreen.tone().fill(0);
@@ -431,8 +427,7 @@ class ZR2CheatLightingController {
         if (is_dark_scene_disabled === false) {
             // set current color tone only if original color tone exists
             if (original_color_tone.length > 0) {
-                $gameScreen._tone =
-                    original_color_tone.clone();
+                $gameScreen._tone = original_color_tone.clone();
             }
             // Ditch current saved color tone
             original_color_tone = [];
@@ -442,10 +437,8 @@ class ZR2CheatLightingController {
     }
 
     static updateDisableDarkSceneInfo() {
-        const text = `${
-            is_dark_scene_disabled ?
-                'Disable' :
-                'Enable'} dark scene effect`
+        const text =
+            `${is_dark_scene_disabled ? 'Disable' : 'Enable'} dark scene effect`
         ZR2CheatManager.updateNotificationMessage(text);
         ZR2CheatManager.registerNotificationFadeEffect();
     }
@@ -566,8 +559,7 @@ class ZR2ChearPanelManager {
                 is_full_item_enabled: is_full_item_enabled,
                 is_maximum_money_enabled: is_maximum_money_enabled,
                 is_zombie_freezed: is_zombie_freezed,
-                is_dark_scene_disabled:
-                    is_dark_scene_disabled,
+                is_dark_scene_disabled: is_dark_scene_disabled,
                 speed_multiplier: speed_multiplier,
                 enemy_count: enemy_count,
             });
@@ -613,8 +605,7 @@ class ZR2CheatHook {
             ZR2CheatEventHandler.handleCheat();
         };
         Scene_Map.prototype.createDisplayObjects = function() {
-            original.Scene_Map.createDisplayObjects.call(
-                this, arguments);
+            original.Scene_Map.createDisplayObjects.call(this, arguments);
             this.speedChangeInfo = ZR2CheatManager.buildSpeedChangeInfo();
             this.addChild(this.speedChangeInfo);
             this.questHintInfo = ZR2CheatManager.buildQuestHintInfo();
@@ -627,13 +618,12 @@ class ZR2CheatHook {
             original.Scene_Title.create.call(this, arguments);
             this.cheatScriptInfo = ZR2CheatManager.buildCheatScriptInfo();
             this.addChild(this.cheatScriptInfo);
-            document.title = original_zr2_title +
-                ' (Hint: Use F7 to open cheat panel)';
+            document.title =
+                original_zr2_title + ' (Hint: Use F7 to open cheat panel)';
         };
         Window_Message.prototype.updateInput = function() {
             let isUpdated =
-                original.Window_Message.updateInput.call(
-                    this, arguments);
+                original.Window_Message.updateInput.call(this, arguments);
             ZR2CheatInputManager.monitorCustomInputSetup();
             isUpdated |= ZR2CheatInputManager.monitorCustomInput();
             return isUpdated;
@@ -643,8 +633,7 @@ class ZR2CheatHook {
             if (ZR2CheatPuzzleHint.checkSexEdQuestActive()) {
                 editWindow._name = '5704811269';
             }
-            original.Window_NameInput.initialize.call(
-                this, editWindow);
+            original.Window_NameInput.initialize.call(this, editWindow);
         };
         SceneManager.updateMain = function() {
             if (Utils.isMobileSafari()) {
