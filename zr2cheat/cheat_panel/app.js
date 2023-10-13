@@ -29,6 +29,10 @@ function fullItems(event) {
     process.emit('OnFullItemsTriggered', event.checked);
 }
 
+function maximumMoney(event) {
+    process.emit('OnMaxMoneyTriggered', event.checked);
+}
+
 function freezeZombies(event) {
     process.emit('OnFreezeZombieTriggered', event.checked);
 }
@@ -56,6 +60,8 @@ process.addListener('SynchronizeCheatStatus', (cheatlist) => {
         cheatlist.is_full_hp_enabled;
     document.getElementById('switch_fullitems').checked =
         cheatlist.is_full_item_enabled;
+    document.getElementById('switch_max_money').checked =
+        cheatlist.is_maximum_money_enabled;
     document.getElementById('switch_freeze_zombie').checked =
         cheatlist.is_zombie_freezed;
     document.getElementById('switch_disable_dark_scene').checked =
@@ -77,6 +83,7 @@ process.addListener('CloseCheatPane', () => {
 process.addListener('ResetCheat', () => {
     document.getElementById('switch_fullhp').checked = false;
     document.getElementById('switch_fullitems').checked = false;
+    document.getElementById('switch_max_money').checked = false;
     document.getElementById('switch_freeze_zombie').checked = false;
     document.getElementById('switch_disable_dark_scene').checked = false;
     document.getElementById('range_speedup').value = 1.0;
@@ -86,4 +93,4 @@ process.addListener('ResetCheat', () => {
 
 process.emit('OnCheatPaneProcessReadyTriggered');
 
-window.resizeTo(500, 470);
+window.resizeTo(500, 500);

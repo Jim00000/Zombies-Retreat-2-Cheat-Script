@@ -43,6 +43,7 @@ var remove_all_enemies_keyname = 'remove_all_enemies';
 var toggle_cheat_panel_keyname = 'toggle_cheat_panel';
 var is_full_hp_enabled = false;
 var is_full_item_enabled = false;
+var is_maximum_money_enabled = false;
 var original_color_tone = [];
 var is_dark_scene_disabled = false;
 var is_cheat_panel_open = false;
@@ -179,6 +180,10 @@ class ZR2CheatEventHandler {
             }
             if (is_full_item_enabled) {
                 ZR2CheatFullItem.setFullItems();
+            }
+            if (is_maximum_money_enabled) {
+                // Set money 99999999999
+                $gameParty._gold = 99999999999;
             }
             if (is_dark_scene_disabled) {
                 ZR2CheatLightingController.disableDarkScene();
@@ -556,6 +561,7 @@ class ZR2ChearPanelManager {
             process.emit('SynchronizeCheatStatus', {
                 is_full_hp_enabled: is_full_hp_enabled,
                 is_full_item_enabled: is_full_item_enabled,
+                is_maximum_money_enabled: is_maximum_money_enabled,
                 is_zombie_freezed: is_zombie_freezed,
                 is_dark_scene_disabled:
                     is_dark_scene_disabled,
@@ -570,6 +576,10 @@ class ZR2ChearPanelManager {
 
         process.addListener('OnFullItemsTriggered', (toggle) => {
             is_full_item_enabled = toggle;
+        });
+
+        process.addListener('OnMaxMoneyTriggered', (toggle) => {
+            is_maximum_money_enabled = toggle;
         });
 
         process.addListener('OnFreezeZombieTriggered', (toggle) => {
