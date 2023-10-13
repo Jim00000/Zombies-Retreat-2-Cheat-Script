@@ -389,6 +389,7 @@ class ZR2CheatFullItem {
         $gameParty._items[73] = 99;  // Milk [Stacy]
         // $gameParty._items[75] =;  // Flare Gun [Lucy]
         // $gameParty._items[77] =;  // Special Battery
+        // $gameParty._items[78] =;  // Battery Locator
         // $gameParty._items[79] =;  // Digital Camera
         // $gameParty._items[80] =;  // Silk Bra
         $gameParty._items[82] = 99;  // Scrap Wood (x3)
@@ -397,6 +398,7 @@ class ZR2CheatFullItem {
         $gameParty._items[85] = 99;  // Water (x3)
         $gameParty._items[86] = 99;  // Food (Grain) (x3)
         $gameParty._items[87] = 99;  // Electric Fuse (x3)
+        // $gameParty._items[94] =;  // Camping Equipment
         // $gameParty._items[95] =;  // Halloween Candy
         // $gameParty._items[96] =;  // Vending Machine Token
         // $gameParty._items[97] =;  // Tasty Juice
@@ -408,6 +410,7 @@ class ZR2CheatFullItem {
         // $gameParty._items[103] =; // Jack-O-Lantern
         // $gameParty._items[110] =; // Fresh Garden(+) Schematic
         // $gameParty._items[111] =; // Water Filter(+) Schematic
+        // $gameParty._items[112] =; // Grain Garden Schematic
     }
 }
 
