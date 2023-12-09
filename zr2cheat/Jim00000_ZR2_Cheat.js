@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.15.2
-// ▶ Update         : 10.14.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.16.2
+// ▶ Update         : 12.09.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.15.2';
+var supported_game_version = 'beta 0.16.2';
 var original_zr2_title = document.title;
 var enemy_name_list = [
     'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
@@ -342,8 +342,8 @@ class ZR2CheatFullHP {
         const maxHP = $gameVariables.value(19);
         const currentHP = $gameVariables.value(18);
         if (currentHP < maxHP + 1) {
-        // Current HP (id = 18) - set to 99999
-        $gameVariables.setValue(18, maxHP + 1);
+            // Current HP (id = 18) - set to 99999
+            $gameVariables.setValue(18, maxHP + 1);
             // Update Health HUD
             ZR2CheatFullHP.updateHPHUD();
         }
