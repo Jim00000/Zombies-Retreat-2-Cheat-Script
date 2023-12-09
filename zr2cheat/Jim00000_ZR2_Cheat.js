@@ -26,6 +26,7 @@
 // --------------------------------------------------------------------------------
 
 var last_frame_count = 0;
+var last_frame_count_automachinegun = 0;
 var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
@@ -44,6 +45,7 @@ var remove_all_enemies_keyname = 'remove_all_enemies';
 var toggle_cheat_panel_keyname = 'toggle_cheat_panel';
 var is_full_hp_enabled = false;
 var is_full_item_enabled = false;
+var is_auto_machine_gun_fire_enabled = false;
 var is_maximum_money_enabled = false;
 var original_color_tone = [];
 var is_dark_scene_disabled = false;
@@ -171,7 +173,14 @@ class ZR2CheatManager {
 class ZR2CheatEventHandler {
     static handleCheat() {
         // Use this to open debug mode, and F9 to open debug panel.
-        // $gameTemp._isPlaytest = true;
+        $gameTemp._isPlaytest = true;
+
+        // update every 5 frame (~0.083333 seconds)
+        if (Graphics.frameCount - last_frame_count_automachinegun > 5) {
+            if (is_auto_machine_gun_fire_enabled)
+                ZR2CheatAutoMachineGunFire.shoot();
+            last_frame_count_automachinegun = Graphics.frameCount;
+        }
 
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - last_frame_count > 30) {
@@ -307,6 +316,15 @@ class ZR2CheatInputManager {
             }
         }
         return false;
+    }
+}
+
+class ZR2CheatAutoMachineGunFire {
+    static shoot() {
+        // Play SE
+        AudioManager.playSe({name: 'Gun1', volume: 5, pitch: 60, pan: 0});
+        // Fire bullet !
+        Galv.PROJ.quickDir(1);
     }
 }
 
@@ -572,6 +590,8 @@ class ZR2ChearPanelManager {
             process.emit('SynchronizeCheatStatus', {
                 is_full_hp_enabled: is_full_hp_enabled,
                 is_full_item_enabled: is_full_item_enabled,
+                is_auto_machine_gun_fire_enabled:
+                    is_auto_machine_gun_fire_enabled,
                 is_maximum_money_enabled: is_maximum_money_enabled,
                 is_zombie_freezed: is_zombie_freezed,
                 is_dark_scene_disabled: is_dark_scene_disabled,
@@ -587,6 +607,10 @@ class ZR2ChearPanelManager {
 
         process.addListener('OnFullItemsTriggered', (toggle) => {
             is_full_item_enabled = toggle;
+        });
+
+        process.addListener('OnAutoMachineGunFireTriggered', (toggle) => {
+            is_auto_machine_gun_fire_enabled = toggle;
         });
 
         process.addListener('OnMaxMoneyTriggered', (toggle) => {

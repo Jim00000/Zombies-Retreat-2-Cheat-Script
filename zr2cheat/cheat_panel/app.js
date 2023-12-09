@@ -29,6 +29,10 @@ function fullItems(event) {
     process.emit('OnFullItemsTriggered', event.checked);
 }
 
+function autoMachineGunFire(event) {
+    process.emit('OnAutoMachineGunFireTriggered', event.checked);
+}
+
 function maximumMoney(event) {
     process.emit('OnMaxMoneyTriggered', event.checked);
 }
@@ -60,6 +64,8 @@ process.addListener('SynchronizeCheatStatus', (cheatlist) => {
         cheatlist.is_full_hp_enabled;
     document.getElementById('switch_fullitems').checked =
         cheatlist.is_full_item_enabled;
+    document.getElementById('switch_auto_machine_gun').checked =
+        cheatlist.is_auto_machine_gun_fire_enabled;
     document.getElementById('switch_max_money').checked =
         cheatlist.is_maximum_money_enabled;
     document.getElementById('switch_freeze_zombie').checked =
@@ -83,6 +89,7 @@ process.addListener('CloseCheatPane', () => {
 process.addListener('ResetCheat', () => {
     document.getElementById('switch_fullhp').checked = false;
     document.getElementById('switch_fullitems').checked = false;
+    document.getElementById('switch_auto_machine_gun').checked = false;
     document.getElementById('switch_max_money').checked = false;
     document.getElementById('switch_freeze_zombie').checked = false;
     document.getElementById('switch_disable_dark_scene').checked = false;
@@ -93,4 +100,4 @@ process.addListener('ResetCheat', () => {
 
 process.emit('OnCheatPaneProcessReadyTriggered');
 
-window.resizeTo(500, 500);
+window.resizeTo(500, 550);
