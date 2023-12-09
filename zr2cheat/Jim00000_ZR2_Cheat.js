@@ -20,17 +20,18 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.15.2
-// ▶ Update         : 10.14.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.16.2
+// ▶ Update         : 12.09.2023
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
 var last_frame_count = 0;
+var last_frame_count_automachinegun = 0;
 var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.15.2';
+var supported_game_version = 'beta 0.16.2';
 var original_zr2_title = document.title;
 var enemy_name_list = [
     'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
@@ -44,6 +45,7 @@ var remove_all_enemies_keyname = 'remove_all_enemies';
 var toggle_cheat_panel_keyname = 'toggle_cheat_panel';
 var is_full_hp_enabled = false;
 var is_full_item_enabled = false;
+var is_auto_machine_gun_fire_enabled = false;
 var is_maximum_money_enabled = false;
 var original_color_tone = [];
 var is_dark_scene_disabled = false;
@@ -171,7 +173,14 @@ class ZR2CheatManager {
 class ZR2CheatEventHandler {
     static handleCheat() {
         // Use this to open debug mode, and F9 to open debug panel.
-        // $gameTemp._isPlaytest = true;
+        $gameTemp._isPlaytest = true;
+
+        // update every 5 frame (~0.083333 seconds)
+        if (Graphics.frameCount - last_frame_count_automachinegun > 5) {
+            if (is_auto_machine_gun_fire_enabled)
+                ZR2CheatAutoMachineGunFire.shoot();
+            last_frame_count_automachinegun = Graphics.frameCount;
+        }
 
         // update every 30 frame (~0.5 seconds)
         if (Graphics.frameCount - last_frame_count > 30) {
@@ -310,16 +319,40 @@ class ZR2CheatInputManager {
     }
 }
 
+class ZR2CheatAutoMachineGunFire {
+    static shoot() {
+        // Play SE
+        AudioManager.playSe({name: 'Gun1', volume: 5, pitch: 60, pan: 0});
+        // Fire bullet !
+        Galv.PROJ.quickDir(1);
+    }
+}
+
 class ZR2CheatFullHP {
+    static updateHPHUD() {
+        const update_hp_hud_id = 15;
+        $dataCommonEvents[update_hp_hud_id].trigger = 1;
+        setTimeout(() => {
+            $dataCommonEvents[update_hp_hud_id].trigger = 0;
+        }, 20);
+    }
+
     static setFullHP() {
         // Max HP (id = 19)
         const maxHP = $gameVariables.value(19);
-        // Current HP (id = 18) - set to 99999
-        $gameVariables.setValue(18, maxHP + 1);
+        const currentHP = $gameVariables.value(18);
+        if (currentHP < maxHP + 1) {
+            // Current HP (id = 18) - set to 99999
+            $gameVariables.setValue(18, maxHP + 1);
+            // Update Health HUD
+            ZR2CheatFullHP.updateHPHUD();
+        }
         // Lucy HP (id = 55) - set to 4
         $gameVariables.setValue(55, 4);
         // Horde Survivor HP (id = 60) - set to 4
         $gameVariables.setValue(60, 4);
+        // Mom HP (id = 66) - set to 4
+        $gameVariables.setValue(66, 4);
     }
 }
 
@@ -557,6 +590,8 @@ class ZR2ChearPanelManager {
             process.emit('SynchronizeCheatStatus', {
                 is_full_hp_enabled: is_full_hp_enabled,
                 is_full_item_enabled: is_full_item_enabled,
+                is_auto_machine_gun_fire_enabled:
+                    is_auto_machine_gun_fire_enabled,
                 is_maximum_money_enabled: is_maximum_money_enabled,
                 is_zombie_freezed: is_zombie_freezed,
                 is_dark_scene_disabled: is_dark_scene_disabled,
@@ -566,11 +601,16 @@ class ZR2ChearPanelManager {
         });
 
         process.addListener('OnFullHPTriggered', (toggle) => {
+            ZR2CheatFullHP.updateHPHUD();
             is_full_hp_enabled = toggle;
         });
 
         process.addListener('OnFullItemsTriggered', (toggle) => {
             is_full_item_enabled = toggle;
+        });
+
+        process.addListener('OnAutoMachineGunFireTriggered', (toggle) => {
+            is_auto_machine_gun_fire_enabled = toggle;
         });
 
         process.addListener('OnMaxMoneyTriggered', (toggle) => {
