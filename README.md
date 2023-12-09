@@ -19,6 +19,7 @@ This repository aims to provide a simple solution cheating in the game Zombie's 
 
 - Speedhack (in game map, or while message window is showing)
 - No damage / full HP
+- Auto machine gun fire (don't consume ammo)
 - Maximum money
 - Full items except a few special items e.g. keys, gun, crafting manuals, event items
 - Freeze zombie's movement & you can pass through the zombies
@@ -30,7 +31,7 @@ This repository aims to provide a simple solution cheating in the game Zombie's 
 
 Find matched game version in [release page](https://github.com/Jim00000/Zombies-Retreat-2-Cheat-Script/releases), download the source code, replace www/js/plugins.js by my plugins.js and put 'zr2cheat' folder under www/js/plugins/ directory.
 
-You should find "cheat is activated. Support Game Version: beta 0.15.2" message at screen's bottom of the game.
+You should find "cheat is activated. Support Game Version: beta 0.16.2" message at screen's bottom of the game.
 
 ## User guide
 
