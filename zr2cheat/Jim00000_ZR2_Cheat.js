@@ -311,15 +311,30 @@ class ZR2CheatInputManager {
 }
 
 class ZR2CheatFullHP {
+    static updateHPHUD() {
+        const update_hp_hud_id = 15;
+        $dataCommonEvents[update_hp_hud_id].trigger = 1;
+        setTimeout(() => {
+            $dataCommonEvents[update_hp_hud_id].trigger = 0;
+        }, 20);
+    }
+
     static setFullHP() {
         // Max HP (id = 19)
         const maxHP = $gameVariables.value(19);
+        const currentHP = $gameVariables.value(18);
+        if (currentHP < maxHP + 1) {
         // Current HP (id = 18) - set to 99999
         $gameVariables.setValue(18, maxHP + 1);
+            // Update Health HUD
+            ZR2CheatFullHP.updateHPHUD();
+        }
         // Lucy HP (id = 55) - set to 4
         $gameVariables.setValue(55, 4);
         // Horde Survivor HP (id = 60) - set to 4
         $gameVariables.setValue(60, 4);
+        // Mom HP (id = 66) - set to 4
+        $gameVariables.setValue(66, 4);
     }
 }
 
@@ -566,6 +581,7 @@ class ZR2ChearPanelManager {
         });
 
         process.addListener('OnFullHPTriggered', (toggle) => {
+            ZR2CheatFullHP.updateHPHUD();
             is_full_hp_enabled = toggle;
         });
 
