@@ -321,10 +321,53 @@ class ZR2CheatInputManager {
 
 class ZR2CheatAutoMachineGunFire {
     static shoot() {
+        // Arguments for gunshot. You can adjust these arguments for your need.
+        const speed = 4;
+        const dist = 10;
+        const split = 30;
         // Play SE
         AudioManager.playSe({name: 'Gun1', volume: 5, pitch: 60, pan: 0});
-        // Fire bullet !
-        Galv.PROJ.quickDir(1);
+        // Shot implementation
+        ZR2CheatAutoMachineGunFire.shot_impl(speed, dist, split);
+    }
+
+    static shot_impl(speed, dist, split) {
+        let sTarget = Galv.PROJ.getTarget(-1);
+        let dir = sTarget._diagDir ? sTarget._diagDir : sTarget._direction;
+        let x = $gameMap.xWithDirection(sTarget.x, dir);
+        let y = $gameMap.yWithDirection(sTarget.y, dir);
+
+        if (split == 1) {
+            Galv.PROJ.atTarget(
+                -1,          // sid
+                {x: x, y: y},
+                speed,       // speed
+                dist,        // dist
+                'Bullet',    // graphic
+                0,           // hitAnim
+                '|s(A:on)',  // action
+                [30]         // regions
+                // terrains,z,pid,hitbox,type
+            );
+        } else {
+            for (let i = 0; i < split; i++) {
+                let theta = 360 * (i / split);
+                Galv.PROJ.atTarget(
+                    -1,  // sid
+                    {
+                        x: x + dist * Math.cos(Math.PI / 180 * theta),
+                        y: y + dist * Math.sin(Math.PI / 180 * theta)
+                    },
+                    speed,       // speed
+                    dist,        // dist
+                    'Bullet',    // graphic
+                    0,           // hitAnim
+                    '|s(A:on)',  // action
+                    [30]         // regions
+                    // terrains,z,pid,hitbox,type
+                );
+            }
+        }
     }
 }
 
