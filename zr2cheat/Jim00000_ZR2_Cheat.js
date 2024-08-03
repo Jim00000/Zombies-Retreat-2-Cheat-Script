@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.16.2
-// ▶ Update         : 12.09.2023
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.19.2
+// ▶ Update         : 08.03.2024
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.16.2';
+var supported_game_version = 'beta 0.19.2';
 var original_zr2_title = document.title;
 var enemy_name_list = [
     'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
@@ -321,10 +321,53 @@ class ZR2CheatInputManager {
 
 class ZR2CheatAutoMachineGunFire {
     static shoot() {
+        // Arguments for gunshot. You can adjust these arguments for your need.
+        const speed = 4;
+        const dist = 10;
+        const split = 30;
         // Play SE
         AudioManager.playSe({name: 'Gun1', volume: 5, pitch: 60, pan: 0});
-        // Fire bullet !
-        Galv.PROJ.quickDir(1);
+        // Shot implementation
+        ZR2CheatAutoMachineGunFire.shot_impl(speed, dist, split);
+    }
+
+    static shot_impl(speed, dist, split) {
+        let sTarget = Galv.PROJ.getTarget(-1);
+        let dir = sTarget._diagDir ? sTarget._diagDir : sTarget._direction;
+        let x = $gameMap.xWithDirection(sTarget.x, dir);
+        let y = $gameMap.yWithDirection(sTarget.y, dir);
+
+        if (split == 1) {
+            Galv.PROJ.atTarget(
+                -1,          // sid
+                {x: x, y: y},
+                speed,       // speed
+                dist,        // dist
+                'Bullet',    // graphic
+                0,           // hitAnim
+                '|s(A:on)',  // action
+                [30]         // regions
+                // terrains,z,pid,hitbox,type
+            );
+        } else {
+            for (let i = 0; i < split; i++) {
+                let theta = 360 * (i / split);
+                Galv.PROJ.atTarget(
+                    -1,  // sid
+                    {
+                        x: x + dist * Math.cos(Math.PI / 180 * theta),
+                        y: y + dist * Math.sin(Math.PI / 180 * theta)
+                    },
+                    speed,       // speed
+                    dist,        // dist
+                    'Bullet',    // graphic
+                    0,           // hitAnim
+                    '|s(A:on)',  // action
+                    [30]         // regions
+                    // terrains,z,pid,hitbox,type
+                );
+            }
+        }
     }
 }
 
@@ -396,11 +439,13 @@ class ZR2CheatFullItem {
         $gameParty._items[38] = 99;  // Golden Fish
         $gameParty._items[39] = 99;  // Magma Fish
         $gameParty._items[40] = 99;  // Rusty Can
+        // $gameParty._items[41] =;  // Deserted Factory Key
         // $gameParty._items[42] =;  // Police Station Key
         // $gameParty._items[43] =;  // Nostalgic Flower
         // $gameParty._items[44] =;  // Hydro Plant Key
         // $gameParty._items[45] =;  // Storage Crane Card A
         // $gameParty._items[47] =;  // Storage Crane Card C
+        // $gameParty._items[49] =;  // Factory Key
         // $gameParty._items[50] =;  // Fiona's Shop Schematic
         // $gameParty._items[51] =;  // Fresh Garden Schematic
         // $gameParty._items[52] =;  // Communications Kit
@@ -409,6 +454,7 @@ class ZR2CheatFullItem {
         // $gameParty._items[58] =;  // Bathroom Seat Instructions
         // $gameParty._items[59] =;  // Water Filter Schematic
         // $gameParty._items[60] =;  // Stacy's Diner Schematic
+        // $gameParty._items[61] =;  // Public Bathhouse Schematic
         $gameParty._items[66] = 99;  // Strawberry Milkshake
         $gameParty._items[67] = 99;  // Chocolate Milkshake
         $gameParty._items[68] = 99;  // Blueberry Milkshake
@@ -438,9 +484,19 @@ class ZR2CheatFullItem {
         // $gameParty._items[101] =; // Purified Orb
         // $gameParty._items[102] =; // Pumpkin
         // $gameParty._items[103] =; // Jack-O-Lantern
+        // $gameParty._items[104] =; // Hospital Flashlight
+        // $gameParty._items[105] =; // Hospital Key
+        // $gameParty._items[106] =; // Cat Toy
+        // $gameParty._items[107] =; // Halloween Subway Card
+        // $gameParty._items[108] =; // Lunar Subway Card
         // $gameParty._items[110] =; // Fresh Garden(+) Schematic
         // $gameParty._items[111] =; // Water Filter(+) Schematic
         // $gameParty._items[112] =; // Grain Garden Schematic
+        // $gameParty._items[113] =; // Decorator Info - City
+        // $gameParty._items[140] =; // Lucky Orange
+        // $gameParty._items[141] =; // Red Envelope (Ox)
+        // $gameParty._items[142] =; // Red Envelope (Dragon)
+        // $gameParty._items[143] =; // Leafy Plum
     }
 }
 
