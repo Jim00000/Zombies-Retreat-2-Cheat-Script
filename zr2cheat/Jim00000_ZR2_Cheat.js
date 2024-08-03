@@ -396,11 +396,13 @@ class ZR2CheatFullItem {
         $gameParty._items[38] = 99;  // Golden Fish
         $gameParty._items[39] = 99;  // Magma Fish
         $gameParty._items[40] = 99;  // Rusty Can
+        // $gameParty._items[41] =;  // Deserted Factory Key
         // $gameParty._items[42] =;  // Police Station Key
         // $gameParty._items[43] =;  // Nostalgic Flower
         // $gameParty._items[44] =;  // Hydro Plant Key
         // $gameParty._items[45] =;  // Storage Crane Card A
         // $gameParty._items[47] =;  // Storage Crane Card C
+        // $gameParty._items[49] =;  // Factory Key
         // $gameParty._items[50] =;  // Fiona's Shop Schematic
         // $gameParty._items[51] =;  // Fresh Garden Schematic
         // $gameParty._items[52] =;  // Communications Kit
@@ -409,6 +411,7 @@ class ZR2CheatFullItem {
         // $gameParty._items[58] =;  // Bathroom Seat Instructions
         // $gameParty._items[59] =;  // Water Filter Schematic
         // $gameParty._items[60] =;  // Stacy's Diner Schematic
+        // $gameParty._items[61] =;  // Public Bathhouse Schematic
         $gameParty._items[66] = 99;  // Strawberry Milkshake
         $gameParty._items[67] = 99;  // Chocolate Milkshake
         $gameParty._items[68] = 99;  // Blueberry Milkshake
@@ -438,9 +441,19 @@ class ZR2CheatFullItem {
         // $gameParty._items[101] =; // Purified Orb
         // $gameParty._items[102] =; // Pumpkin
         // $gameParty._items[103] =; // Jack-O-Lantern
+        // $gameParty._items[104] =; // Hospital Flashlight
+        // $gameParty._items[105] =; // Hospital Key
+        // $gameParty._items[106] =; // Cat Toy
+        // $gameParty._items[107] =; // Halloween Subway Card
+        // $gameParty._items[108] =; // Lunar Subway Card
         // $gameParty._items[110] =; // Fresh Garden(+) Schematic
         // $gameParty._items[111] =; // Water Filter(+) Schematic
         // $gameParty._items[112] =; // Grain Garden Schematic
+        // $gameParty._items[113] =; // Decorator Info - City
+        // $gameParty._items[140] =; // Lucky Orange
+        // $gameParty._items[141] =; // Red Envelope (Ox)
+        // $gameParty._items[142] =; // Red Envelope (Dragon)
+        // $gameParty._items[143] =; // Leafy Plum
     }
 }
 
