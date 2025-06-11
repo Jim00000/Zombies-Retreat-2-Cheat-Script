@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.19.2
-// ▶ Update         : 08.03.2024
+// ▶ Target process : Zombie's Retreat 2 - Beta 0.23.1
+// ▶ Update         : 06.12.2025
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.19.2';
+var supported_game_version = 'beta 0.23.1';
 var original_zr2_title = document.title;
 var enemy_name_list = [
     'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
@@ -470,7 +470,7 @@ class ZR2CheatFullItem {
         // $gameParty._items[80] =;  // Silk Bra
         $gameParty._items[82] = 99;  // Scrap Wood (x3)
         $gameParty._items[83] = 99;  // Scrap Metal (x3)
-        $gameParty._items[84] = 99;  // Scrap Brick (x3)
+        $gameParty._items[84] = 99;  // Scrap Brick (x4)
         $gameParty._items[85] = 99;  // Water (x3)
         $gameParty._items[86] = 99;  // Food (Grain) (x3)
         $gameParty._items[87] = 99;  // Electric Fuse (x3)
@@ -489,14 +489,40 @@ class ZR2CheatFullItem {
         // $gameParty._items[106] =; // Cat Toy
         // $gameParty._items[107] =; // Halloween Subway Card
         // $gameParty._items[108] =; // Lunar Subway Card
+        // $gameParty._items[109] =; // Christmas Subway Card
         // $gameParty._items[110] =; // Fresh Garden(+) Schematic
         // $gameParty._items[111] =; // Water Filter(+) Schematic
         // $gameParty._items[112] =; // Grain Garden Schematic
         // $gameParty._items[113] =; // Decorator Info - City
+        // $gameParty._items[115] =; // Brittle Rod
+        // $gameParty._items[116] =; // Frozen Fish
+        // $gameParty._items[117] =; // Arctic Fish
+        // $gameParty._items[118] =; // Sweet Sugar
+        // $gameParty._items[119] =; // Ginger Bread
+        // $gameParty._items[120] =; // Holiday Wreath
+        // $gameParty._items[121] =; // Ice Rink Token
+        // $gameParty._items[122] =; // Cool Present
+        // $gameParty._items[123] =; // Odd Present
+        // $gameParty._items[124] =; // Boring Present
+        // $gameParty._items[125] =; // Pretty Present
+        // $gameParty._items[126] =; // Pizza Slice
+        // $gameParty._items[127] =; // Soft Butter
+        // $gameParty._items[128] =; // Holiday Cookie
+        // $gameParty._items[129] =; // Hot Cocoa
+        // $gameParty._items[130] =; // Letter to Santa
+        // $gameParty._items[131] =; // Peppermint Bra
+        // $gameParty._items[132] =; // Chocolate Chip Cookie
+        // $gameParty._items[133] =; // Discount Coupon
+        // $gameParty._items[134] =; // Holiday Ornaments
+        // $gameParty._items[135] =; // Sweet Cream
+        // $gameParty._items[136] =; // Snowman Clothes
+        // $gameParty._items[137] =; // Bedroom Key
+        // $gameParty._items[138] =; // Fluffy Stocking
         // $gameParty._items[140] =; // Lucky Orange
         // $gameParty._items[141] =; // Red Envelope (Ox)
         // $gameParty._items[142] =; // Red Envelope (Dragon)
         // $gameParty._items[143] =; // Leafy Plum
+        // $gameParty._items[144] =; // Lunar Card
     }
 }
 
