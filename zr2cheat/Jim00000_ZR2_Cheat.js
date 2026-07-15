@@ -396,6 +396,8 @@ class ZR2CheatFullHP {
         $gameVariables.setValue(60, 4);
         // Mom HP (id = 66) - set to 4
         $gameVariables.setValue(66, 4);
+        // Bike HP (id = 220) - set to (maxHP + 1)
+        $gameVariables.setValue(220, maxHP + 1);
     }
 }
 
