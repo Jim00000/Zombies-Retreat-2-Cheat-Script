@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.23.1
-// ▶ Update         : 06.12.2025
+// ▶ Target process : Zombie's Retreat 2 - v1.0.1
+// ▶ Update         : 07.16.2026
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.23.1';
+var supported_game_version = 'v1.0.1';
 var original_zr2_title = document.title;
 var enemy_name_list = [
     'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
@@ -396,6 +396,8 @@ class ZR2CheatFullHP {
         $gameVariables.setValue(60, 4);
         // Mom HP (id = 66) - set to 4
         $gameVariables.setValue(66, 4);
+        // Bike HP (id = 220) - set to (maxHP + 1)
+        $gameVariables.setValue(220, maxHP + 1);
     }
 }
 
@@ -415,9 +417,9 @@ class ZR2CheatFullItem {
         $gameParty._items[12] = 99;  // Med kit
         $gameParty._items[13] = 99;  // Food (Fresh)
         $gameParty._items[14] = 99;  // Golden Key
-        // $gameParty._items[15] =;  // Crafting Manual (Beginner)
-        // $gameParty._items[16] =;  // Crafting Manual (Intermediate)
-        // $gameParty._items[17] =;  // Crafting Manual (Advanced)
+        // $gameParty._items[15] =;  // Beginner's Crafting Guide
+        // $gameParty._items[16] =;  // Medical Manual
+        // $gameParty._items[17] =;  // Pet's Plus Vol. 5
         // $gameParty._items[18] =;  // Bartender's Basics
         // $gameParty._items[19] =;  // Pistol
         $gameParty._items[20] = 99;  // Ammunition(Revolver)
@@ -430,7 +432,7 @@ class ZR2CheatFullItem {
         $gameParty._items[29] = 99;  // String
         $gameParty._items[30] = 99;  // Fishing rod
         $gameParty._items[31] = 99;  // Wood Cutting Axe
-        $gameParty._items[32] = 99;  // Metal-Cutting Saw
+        $gameParty._items[32] = 99;  // Metal Cutting Saw
         $gameParty._items[33] = 99;  // Heavy Hammer
         $gameParty._items[34] = 99;  // Z-Cola
         // $gameParty._items[35] =;  // Erotic Soap
@@ -445,11 +447,13 @@ class ZR2CheatFullItem {
         // $gameParty._items[44] =;  // Hydro Plant Key
         // $gameParty._items[45] =;  // Storage Crane Card A
         // $gameParty._items[47] =;  // Storage Crane Card C
+        // $gameParty._items[48] =;  // Mall Security Key
         // $gameParty._items[49] =;  // Factory Key
         // $gameParty._items[50] =;  // Fiona's Shop Schematic
         // $gameParty._items[51] =;  // Fresh Garden Schematic
         // $gameParty._items[52] =;  // Communications Kit
         // $gameParty._items[53] =;  // Subway Blue Card
+        // $gameParty._items[54] =;  // Subway Red Card
         // $gameParty._items[55] =;  // Helios Module B
         // $gameParty._items[58] =;  // Bathroom Seat Instructions
         // $gameParty._items[59] =;  // Water Filter Schematic
@@ -487,9 +491,9 @@ class ZR2CheatFullItem {
         // $gameParty._items[104] =; // Hospital Flashlight
         // $gameParty._items[105] =; // Hospital Key
         // $gameParty._items[106] =; // Cat Toy
-        // $gameParty._items[107] =; // Halloween Subway Card
-        // $gameParty._items[108] =; // Lunar Subway Card
-        // $gameParty._items[109] =; // Christmas Subway Card
+        // $gameParty._items[107] =; // SX Subway Card [Spooky]
+        // $gameParty._items[108] =; // SX Subway Card [Lunar]
+        // $gameParty._items[109] =; // SX Subway Card [Holiday]
         // $gameParty._items[110] =; // Fresh Garden(+) Schematic
         // $gameParty._items[111] =; // Water Filter(+) Schematic
         // $gameParty._items[112] =; // Grain Garden Schematic
@@ -518,11 +522,19 @@ class ZR2CheatFullItem {
         // $gameParty._items[136] =; // Snowman Clothes
         // $gameParty._items[137] =; // Bedroom Key
         // $gameParty._items[138] =; // Fluffy Stocking
+        // $gameParty._items[139] =; // Haunted Manor Key
         // $gameParty._items[140] =; // Lucky Orange
         // $gameParty._items[141] =; // Red Envelope (Ox)
         // $gameParty._items[142] =; // Red Envelope (Dragon)
         // $gameParty._items[143] =; // Leafy Plum
         // $gameParty._items[144] =; // Lunar Card
+        // $gameParty._items[145] =; // Goon Hideout Key
+        // $gameParty._items[146] =; // \n[2]'s Panties
+        // $gameParty._items[147] =; // \n[4]'s Panties
+        // $gameParty._items[148] =; // 'Lovely Night' Perfume
+        // $gameParty._items[149] =; // Chocolate Frosted Donut
+        // $gameParty._items[150] =; // Blue Gem
+        // $gameParty._items[151] =; // Blue Gem Fragment
     }
 }
 
