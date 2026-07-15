@@ -20,8 +20,8 @@
 // Jim00000's cheat script for Zombie's Retreat 2
 // --------------------------------------------------------------------------------
 // ▶ Author         : Jim00000
-// ▶ Target process : Zombie's Retreat 2 - Beta 0.23.1
-// ▶ Update         : 06.12.2025
+// ▶ Target process : Zombie's Retreat 2 - v1.0.1
+// ▶ Update         : 07.16.2026
 // ▶ License        : GNU GENERAL PUBLIC LICENSE Version 3
 // --------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ var speed_multiplier = 1.0;
 var fadeEffectHandlerId = -1;
 var is_zombie_freezed = false;
 var enemy_count = 0;
-var supported_game_version = 'beta 0.23.1';
+var supported_game_version = 'v1.0.1';
 var original_zr2_title = document.title;
 var enemy_name_list = [
     'HC_Zombies2A', 'HC_Zombies2B', 'HC_Zombies2C', 'HC_Zombies2D',
